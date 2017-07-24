@@ -1,12 +1,11 @@
-package cluster
+package ovirtapi
 
 import (
 	"encoding/xml"
-	"github.com/emsl-msc/ovirtapi"
 )
 
 type Cluster struct {
-	ovirtapi.OvirtObject
+	OvirtObject
 	XMLName xml.Name `xml:"cluster"`
 	BallooningEnabled string `xml:"ballooning_enabled,omitempty"`
 	Cpu struct {
@@ -69,75 +68,7 @@ type Cluster struct {
 		Minor int `xml:"minor,omitempty"`
 	} `xml:"version,omitempty"`
 	VirtService string `xml:"virt_service,omitempty"`
-	DataCenter *ovirtapi.Link `xml:"data_center,omitempty"`
-	MacPool *ovirtapi.Link `xml:"mac_pool,omitempty"`
-	SchedulingPolicy *ovirtapi.Link `xml:"scheduling_policy,omitempty"`
-}
-
-func Get(api *ovirtapi.API, id string) (*Cluster, error) {
-	body, err := api.GetLinkBody("clusters", id)
-	if err != nil {
-		return nil, err
-	}
-	cluster := New(api)
-	err = xml.Unmarshal(body, cluster)
-	if err != nil {
-		return nil, err
-	}
-	return cluster, err
-}
-
-func GetAll(api *ovirtapi.API) ([]*Cluster, error) {
-	body, err := api.GetLinkBody("clusters", "")
-	if err != nil {
-		return nil, err
-	}
-	clusters := []*Cluster{}
-	err = xml.Unmarshal(body, &struct {Clusters *[]*Cluster `xml:"cluster"`}{&clusters})
-	if err != nil {
-		return nil, err
-	}
-	for _, cluster := range clusters {
-		cluster.Api = api
-	}
-	return clusters, err
-}
-
-func NewCluster(api *ovirtapi.API) (*Cluster) {
-	return &Cluster{OvirtObject: ovirtapi.OvirtObject{Api: api}}
-}
-
-func (cluster *Cluster) Save() (error) {
-	body, err := xml.MarshalIndent(cluster, "", "    ")
-	if err != nil {
-		return err
-	}
-	// If there is a link, it is an already saved object, we need to update it
-	if cluster.OvirtObject.Href != "" {
-		body, err = cluster.Api.Request("PUT", cluster.Api.ResolveLink(cluster.Href), body)
-		if err != nil {
-			return err
-		}
-	} else {
-		link, err := cluster.Api.GetLink("clusters")
-		if err != nil {
-			return err
-		}
-		body, err = cluster.Api.Request("POST", link, body)
-		if err != nil {
-			return err
-		}
-	}
-	tempCluster := Cluster{OvirtObject: ovirtapi.OvirtObject{Api: cluster.Api}}
-	err = xml.Unmarshal(body, &tempCluster)
-	*cluster = tempCluster
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (cluster *Cluster) Delete() (error) {
-	_, err := cluster.Api.Request("DELETE", cluster.Api.ResolveLink(cluster.Href), nil)
-	return err
+	DataCenter *Link `xml:"data_center,omitempty"`
+	MacPool *Link `xml:"mac_pool,omitempty"`
+	SchedulingPolicy *Link `xml:"scheduling_policy,omitempty"`
 }

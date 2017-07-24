@@ -1,0 +1,72 @@
+//go:generate genny -in=$GOFILE -out=gen-$GOFILE gen "OvirtObjectType=Vm,Cluster" -pkg ovirtapi
+package ovirtapi
+
+import (
+	"encoding/xml"
+	"reflect"
+  "github.com/cheekybits/genny/generic"
+)
+
+type OvirtObjectType generic.Type
+
+func (api *API) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", id)
+	if err != nil {
+		return nil, err
+	}
+	object := api.NewOvirtObjectType()
+	err = xml.Unmarshal(body, object)
+	if err != nil {
+		return nil, err
+	}
+	return object, err
+}
+
+func (api *API) GetAllOvirtObjectType() ([]*OvirtObjectType, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", "")
+	if err != nil {
+		return nil, err
+	}
+	objects := []*OvirtObjectType{}
+	err = xml.Unmarshal(body, &struct {
+		Objects *[]*OvirtObjectType
+	}{&objects})
+	if err != nil {
+		return nil, err
+	}
+	for _, object := range objects {
+		object.Api = api
+	}
+	return objects, err
+}
+
+func (api *API) NewOvirtObjectType() *OvirtObjectType {
+	return &OvirtObjectType{OvirtObject: OvirtObject{Api: api}}
+}
+
+func (object *OvirtObjectType) Save() error {
+	body, err := xml.MarshalIndent(object, "", "    ")
+	if err != nil {
+		return err
+	}
+	// If there is a link, it is an already saved object, we need to update it
+	if object.OvirtObject.Href != "" {
+		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+	} else {
+		link, err := object.Api.GetLink(reflect.TypeOf(OvirtObjectType{}).Name() + "s")
+		if err != nil {
+			return err
+		}
+		body, err = object.Api.Request("POST", link, body)
+	}
+	if err != nil {
+		return err
+	}
+	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
+	err = xml.Unmarshal(body, &tempObject)
+	*object = tempObject
+	if err != nil {
+		return err
+	}
+	return nil
+}

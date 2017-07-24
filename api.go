@@ -129,7 +129,7 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 
 func (api *API) GetLink(rel string) (*url.URL, error) {
 	for _, link := range api.Links {
-		if rel == link.Rel {
+		if strings.ToLower(rel) == link.Rel {
 			return api.ResolveLink(link.Href), nil
 		}
 	}

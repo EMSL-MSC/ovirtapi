@@ -32,3 +32,8 @@ func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 	}
 	return nil, errors.New("Link not found")
 }
+
+func (ovirtObject *OvirtObject) Delete() error {
+        _, err := ovirtObject.Api.Request("DELETE", ovirtObject.Api.ResolveLink(ovirtObject.Href), nil)
+        return err
+}

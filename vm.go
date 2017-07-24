@@ -1,12 +1,11 @@
-package vm
+package ovirtapi
 
 import (
 	"encoding/xml"
-	"github.com/emsl-msc/ovirtapi"
 )
 
 type Vm struct {
-	ovirtapi.OvirtObject
+	OvirtObject
 	XMLName     xml.Name `xml:"vm"`
 	Description string   `xml:"description,omitempty"`
 	Comment     string   `xml:"comment,omitempty"`
@@ -47,7 +46,7 @@ type Vm struct {
 	// Io *struct {
 	// 	Threads int `xml:"threads,omitempty"`
 	// } `xml:"io,omitempty"`
-	LargeIcon    *ovirtapi.Link `xml:"large_icon,omitempty"`
+	LargeIcon    *Link `xml:"large_icon,omitempty"`
 	Memory       int            `xml:"memory,omitempty"`
 	MemoryPolicy *struct {
 		Ballooning bool `xml:"ballooning,omitempty"`
@@ -66,7 +65,7 @@ type Vm struct {
 		} `xml:"boot,omitempty"`
 		Type string `xml:"type,omitempty"`
 	} `xml:"os,omitempty"`
-	SmallIcon   *ovirtapi.Link `xml:"small_icon,omitempty"`
+	SmallIcon   *Link `xml:"small_icon,omitempty"`
 	StartPaused bool           `xml:"start_paused,omitempty"`
 	Stateless   bool           `xml:"stateless,omitempty"`
 	TimeZone    *struct {
@@ -76,9 +75,9 @@ type Vm struct {
 	Usb  *struct {
 		Enabled bool `xml:"enabled,omitempty"`
 	} `xml:"usb,omitempty"`
-	Cluster                    *ovirtapi.OvirtObject `xml:"cluster,omitempty"`
-	CpuProfile                 *ovirtapi.Link `xml:"cpu_profile,omitempty"`
-	Quota                      *ovirtapi.Link `xml:"quota,omitempty"`
+	Cluster                    *OvirtObject `xml:"cluster,omitempty"`
+	CpuProfile                 *Link `xml:"cpu_profile,omitempty"`
+	Quota                      *Link `xml:"quota,omitempty"`
 	NextRunConfigurationExists bool           `xml:"next_run_configuration_exists,omitempty"`
 	NumaTuneMode               string         `xml:"numa_tune_mode,omitempty"`
 	PlacementPolicy            *struct {
@@ -88,75 +87,8 @@ type Vm struct {
 	StartTime        string         `xml:"start_time,omitempty"`
 	Status           string         `xml:"status,omitempty"`
 	StopTime         string         `xml:"stop_time,omitempty"`
-	Host             *ovirtapi.Link `xml:"host,omitempty"`
-	InstanceType     *ovirtapi.Link `xml:"instance_type,omitempty"`
-	OriginalTemplate *ovirtapi.Link `xml:"original_template,omitempty"`
-	Template         *ovirtapi.Link `xml:"template,omitempty"`
-}
-
-func Get(api *ovirtapi.API, id string) (*Vm, error) {
-	body, err := api.GetLinkBody("vms", id)
-	if err != nil {
-		return nil, err
-	}
-	vm := NewVm(api)
-	err = xml.Unmarshal(body, vm)
-	if err != nil {
-		return nil, err
-	}
-	return vm, err
-}
-
-func GetAll(api *ovirtapi.API) ([]*Vm, error) {
-	body, err := api.GetLinkBody("vms", "")
-	if err != nil {
-		return nil, err
-	}
-	vms := []*Vm{}
-	err = xml.Unmarshal(body, &struct {
-		Vms *[]*Vm `xml:"vm"`
-	}{&vms})
-	if err != nil {
-		return nil, err
-	}
-	for _, vm := range vms {
-		vm.Api = api
-	}
-	return vms, err
-}
-
-func New(api *ovirtapi.API) *Vm {
-	return &Vm{OvirtObject: ovirtapi.OvirtObject{Api: api}}
-}
-
-func (vm *Vm) Save() error {
-	body, err := xml.MarshalIndent(vm, "", "    ")
-	if err != nil {
-		return err
-	}
-	// If there is a link, it is an already saved object, we need to update it
-	if vm.OvirtObject.Href != "" {
-		body, err = vm.Api.Request("PUT", vm.Api.ResolveLink(vm.Href), body)
-	} else {
-		link, err := vm.Api.GetLink("vms")
-		if err != nil {
-			return err
-		}
-		body, err = vm.Api.Request("POST", link, body)
-	}
-	if err != nil {
-		return err
-	}
-	tempVm := Vm{OvirtObject: ovirtapi.OvirtObject{Api: vm.Api}}
-	err = xml.Unmarshal(body, &tempVm)
-	*vm = tempVm
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (vm *Vm) Delete() error {
-	_, err := vm.Api.Request("DELETE", vm.Api.ResolveLink(vm.Href), nil)
-	return err
+	Host             *Link `xml:"host,omitempty"`
+	InstanceType     *Link `xml:"instance_type,omitempty"`
+	OriginalTemplate *Link `xml:"original_template,omitempty"`
+	Template         *Link `xml:"template,omitempty"`
 }

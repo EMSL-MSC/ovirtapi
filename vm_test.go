@@ -1,10 +1,9 @@
-package vm_test
+package ovirtapi_test
 
 import (
-	"github.com/emsl-msc/ovirtapi"
-	"github.com/emsl-msc/ovirtapi/vm"
 	"os"
 	"testing"
+	"github.com/emsl-msc/ovirtapi"
 )
 
 func TestVm(t *testing.T) {
@@ -26,21 +25,21 @@ func TestVm(t *testing.T) {
 		t.Error("error creating api connection", err)
 		return
 	}
-	newVm := vm.New(api)
+	newVm := api.NewVm()
 	newVm.Name = "test-vm"
 	newVm.Template = &ovirtapi.Link{
 		Href: "/ovirt-engine/api/templates/00000000-0000-0000-0000-000000000000",
 		Id:   "00000000-0000-0000-0000-000000000000",
 	}
-	newVm.Cluster = &ovirtapi.Link{
+	newVm.Cluster = &ovirtapi.OvirtObject{Link: ovirtapi.Link{
 		Href: "/ovirt-engine/api/clusters/00000002-0002-0002-0002-00000000017a",
 		Id:   "00000002-0002-0002-0002-00000000017a",
-	}
+	}}
 	err = newVm.Save()
 	if err != nil {
 		t.Fatal("Error creating new vm", err)
 	}
-	retrievedVm, err := vm.Get(api, newVm.Id)
+	retrievedVm, err := api.GetVm(newVm.Id)
 	if err != nil {
 		t.Fatal("Error retrieving vm", err)
 	}

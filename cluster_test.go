@@ -1,10 +1,9 @@
-package cluster_test
+package ovirtapi_test
 
 import (
 	"os"
 	"testing"
 	"github.com/emsl-msc/ovirtapi"
-	"github.com/emsl-msc/ovirtapi/cluster"
 )
 
 func TestCluster(t *testing.T) {
@@ -26,7 +25,7 @@ func TestCluster(t *testing.T) {
 		t.Error("error creating api connection", err)
 		return
 	}
-	newCluster := cluster.New(api)
+	newCluster := api.NewCluster()
 	newCluster.Name = "test-cluster"
 	newCluster.Cpu.Architecture = "x86_64"
 	newCluster.Cpu.Type = "Intel Haswell-noTSX Family"
@@ -35,7 +34,7 @@ func TestCluster(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error creating new cluster", err)
 	}
-	retrievedCluster, err := cluster.Get(api, newCluster.Id)
+	retrievedCluster, err := api.GetCluster(newCluster.Id)
 	if err != nil {
 		t.Fatal("Error retrieving cluster", err)
 	}
