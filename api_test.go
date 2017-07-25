@@ -1,16 +1,30 @@
-package ovirtapi
+package ovirtapi_test
 
 import (
+	"github.com/emsl-msc/ovirtapi"
 	"testing"
+	"os"
 )
 
 func TestNewAPI(t *testing.T) {
-	_, err := NewAPI("https://c0.emsl.pnl.gov:443/ovirt-engine/api/", "admin@internal", "boog7Ure")
-	if err != nil {
-		t.Error("Did not create new API")
+	username := os.Getenv("OVIRT_USERNAME")
+	if username == "" {
+		t.Error("OVIRT_USERNAME is not set")
 	}
-	_, err = NewAPI("https://c0.emsl.pnl.gov:443/ovirt-engine/api/", "admin@internal", "boog7Urea")
+	password := os.Getenv("OVIRT_PASSWORD")
+	if password == "" {
+		t.Error("OVIRT_PASSWORD is not set")
+	}
+	url := os.Getenv("OVIRT_URL")
+	if url == "" {
+		t.Error("OVIRT_URL is not set")
+	}
+	_, err := ovirtapi.NewAPI(url, username, password)
+	if err != nil {
+		t.Error("Did not create new API", err)
+	}
+	_, err = ovirtapi.NewAPI(url, "baduser", "badpass")
 	if err == nil {
-		t.Error("Did not fail when passed bad password")
+		t.Error("Did not fail when passed bad password", err)
 	}
 }
