@@ -2,8 +2,8 @@ package ovirtapi_test
 
 import (
 	"github.com/emsl-msc/ovirtapi"
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestNewAPI(t *testing.T) {

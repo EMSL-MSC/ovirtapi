@@ -1,7 +1,7 @@
 package ovirtapi
 
 import (
-	"strings"
+	"bytes"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"bytes"
+	"strings"
 )
 
 type Link struct {
@@ -60,8 +60,8 @@ type API struct {
 
 type Fault struct {
 	XMLName xml.Name `xml:"fault"`
-	Detail string `xml:"detail"`
-	Reason string `xml:"reason"`
+	Detail  string   `xml:"detail"`
+	Reason  string   `xml:"reason"`
 }
 
 func NewAPI(endpoint string, username string, password string) (*API, error) {
@@ -82,7 +82,7 @@ func NewAPI(endpoint string, username string, password string) (*API, error) {
 	return api, nil
 }
 
-func (api *API) ResolveLink(link string) (*url.URL) {
+func (api *API) ResolveLink(link string) *url.URL {
 	return api.EndPoint.ResolveReference(&url.URL{Path: link})
 }
 

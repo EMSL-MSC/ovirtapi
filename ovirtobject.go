@@ -7,11 +7,11 @@ import (
 
 type OvirtObject struct {
 	Link
-	Api			*API `xml:"-"`
-	Name    string `xml:"name"`
-	Description    string `xml:"description,omitempty"`
-	Actions []Link `xml:"actions>link,omitempty"`
-	Links   []Link `xml:"link,omitempty"`
+	Api         *API   `xml:"-"`
+	Name        string `xml:"name"`
+	Description string `xml:"description,omitempty"`
+	Actions     []Link `xml:"actions>link,omitempty"`
+	Links       []Link `xml:"link,omitempty"`
 }
 
 func (ovirtObject *OvirtObject) DoAction(action string) (err error) {
@@ -34,6 +34,6 @@ func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 }
 
 func (ovirtObject *OvirtObject) Delete() error {
-        _, err := ovirtObject.Api.Request("DELETE", ovirtObject.Api.ResolveLink(ovirtObject.Href), nil)
-        return err
+	_, err := ovirtObject.Api.Request("DELETE", ovirtObject.Api.ResolveLink(ovirtObject.Href), nil)
+	return err
 }

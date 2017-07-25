@@ -1,10 +1,10 @@
 package ovirtapi_test
 
 import (
-	"os"
-	"testing"
 	"github.com/emsl-msc/ovirtapi"
+	"os"
 	"strconv"
+	"testing"
 )
 
 func TestCluster(t *testing.T) {

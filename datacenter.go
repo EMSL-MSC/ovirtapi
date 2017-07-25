@@ -6,11 +6,11 @@ import (
 
 type DataCenter struct {
 	OvirtObject
-	XMLName xml.Name `xml:"data_center"`
-	Local string `xml:"local,omitempty"`
-	QuotaMode string `xml:"quota_mode,omitempty"`
-	Status string `xml:"status,omitempty"`
-	StorageFormat string `xml:"storage_format,omitempty"`
+	XMLName           xml.Name `xml:"data_center"`
+	Local             string   `xml:"local,omitempty"`
+	QuotaMode         string   `xml:"quota_mode,omitempty"`
+	Status            string   `xml:"status,omitempty"`
+	StorageFormat     string   `xml:"storage_format,omitempty"`
 	SupportedVersions []struct {
 		Version struct {
 			Major int `xml:"major,omitempty"`

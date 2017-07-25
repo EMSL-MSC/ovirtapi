@@ -47,7 +47,7 @@ type Vm struct {
 	// 	Threads int `xml:"threads,omitempty"`
 	// } `xml:"io,omitempty"`
 	LargeIcon    *Link `xml:"large_icon,omitempty"`
-	Memory       int            `xml:"memory,omitempty"`
+	Memory       int   `xml:"memory,omitempty"`
 	MemoryPolicy *struct {
 		Ballooning bool `xml:"ballooning,omitempty"`
 		Guaranteed int  `xml:"guaranteed,omitempty"`
@@ -66,8 +66,8 @@ type Vm struct {
 		Type string `xml:"type,omitempty"`
 	} `xml:"os,omitempty"`
 	SmallIcon   *Link `xml:"small_icon,omitempty"`
-	StartPaused bool           `xml:"start_paused,omitempty"`
-	Stateless   bool           `xml:"stateless,omitempty"`
+	StartPaused bool  `xml:"start_paused,omitempty"`
+	Stateless   bool  `xml:"stateless,omitempty"`
 	TimeZone    *struct {
 		Name string `xml:"name,omitempty"`
 	} `xml:"time_zone,omitempty"`
@@ -76,19 +76,19 @@ type Vm struct {
 		Enabled bool `xml:"enabled,omitempty"`
 	} `xml:"usb,omitempty"`
 	Cluster                    *OvirtObject `xml:"cluster,omitempty"`
-	CpuProfile                 *Link `xml:"cpu_profile,omitempty"`
-	Quota                      *Link `xml:"quota,omitempty"`
-	NextRunConfigurationExists bool           `xml:"next_run_configuration_exists,omitempty"`
-	NumaTuneMode               string         `xml:"numa_tune_mode,omitempty"`
+	CpuProfile                 *Link        `xml:"cpu_profile,omitempty"`
+	Quota                      *Link        `xml:"quota,omitempty"`
+	NextRunConfigurationExists bool         `xml:"next_run_configuration_exists,omitempty"`
+	NumaTuneMode               string       `xml:"numa_tune_mode,omitempty"`
 	PlacementPolicy            *struct {
 		Affinity string `xml:"affinity,omitempty"`
 	} `xml:"placement_policy,omitempty"`
-	RunOnce          bool           `xml:"run_once,omitempty"`
-	StartTime        string         `xml:"start_time,omitempty"`
-	Status           string         `xml:"status,omitempty"`
-	StopTime         string         `xml:"stop_time,omitempty"`
-	Host             *Link `xml:"host,omitempty"`
-	InstanceType     *Link `xml:"instance_type,omitempty"`
-	OriginalTemplate *Link `xml:"original_template,omitempty"`
-	Template         *Link `xml:"template,omitempty"`
+	RunOnce          bool   `xml:"run_once,omitempty"`
+	StartTime        string `xml:"start_time,omitempty"`
+	Status           string `xml:"status,omitempty"`
+	StopTime         string `xml:"stop_time,omitempty"`
+	Host             *Link  `xml:"host,omitempty"`
+	InstanceType     *Link  `xml:"instance_type,omitempty"`
+	OriginalTemplate *Link  `xml:"original_template,omitempty"`
+	Template         *Link  `xml:"template,omitempty"`
 }
