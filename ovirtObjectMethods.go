@@ -52,15 +52,18 @@ func (object *Vm) Save() error {
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
 		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
 	} else {
 		link, err := object.Api.GetLink(reflect.TypeOf(Vm{}).Name() + "s")
 		if err != nil {
 			return err
 		}
 		body, err = object.Api.Request("POST", link, body)
-	}
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 	tempObject := Vm{OvirtObject: OvirtObject{Api: object.Api}}
 	err = xml.Unmarshal(body, &tempObject)
@@ -114,17 +117,85 @@ func (object *Cluster) Save() error {
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
 		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
 	} else {
 		link, err := object.Api.GetLink(reflect.TypeOf(Cluster{}).Name() + "s")
 		if err != nil {
 			return err
 		}
 		body, err = object.Api.Request("POST", link, body)
+		if err != nil {
+			return err
+		}
 	}
+	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
+	err = xml.Unmarshal(body, &tempObject)
+	*object = tempObject
 	if err != nil {
 		return err
 	}
-	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
+	return nil
+}
+
+func (api *API) GetDataCenter(id string) (*DataCenter, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", id)
+	if err != nil {
+		return nil, err
+	}
+	object := api.NewDataCenter()
+	err = xml.Unmarshal(body, object)
+	if err != nil {
+		return nil, err
+	}
+	return object, err
+}
+
+func (api *API) GetAllDataCenter() ([]*DataCenter, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", "")
+	if err != nil {
+		return nil, err
+	}
+	objects := []*DataCenter{}
+	err = xml.Unmarshal(body, &struct {
+		Objects *[]*DataCenter
+	}{&objects})
+	if err != nil {
+		return nil, err
+	}
+	for _, object := range objects {
+		object.Api = api
+	}
+	return objects, err
+}
+
+func (api *API) NewDataCenter() *DataCenter {
+	return &DataCenter{OvirtObject: OvirtObject{Api: api}}
+}
+
+func (object *DataCenter) Save() error {
+	body, err := xml.MarshalIndent(object, "", "    ")
+	if err != nil {
+		return err
+	}
+	// If there is a link, it is an already saved object, we need to update it
+	if object.OvirtObject.Href != "" {
+		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
+	} else {
+		link, err := object.Api.GetLink(reflect.TypeOf(DataCenter{}).Name() + "s")
+		if err != nil {
+			return err
+		}
+		body, err = object.Api.Request("POST", link, body)
+		if err != nil {
+			return err
+		}
+	}
+	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
 	err = xml.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {

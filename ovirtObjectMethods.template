@@ -52,15 +52,18 @@ func (object *OvirtObjectType) Save() error {
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
 		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
 	} else {
 		link, err := object.Api.GetLink(reflect.TypeOf(OvirtObjectType{}).Name() + "s")
 		if err != nil {
 			return err
 		}
 		body, err = object.Api.Request("POST", link, body)
-	}
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
 	err = xml.Unmarshal(body, &tempObject)
