@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 	"github.com/emsl-msc/ovirtapi"
+	"strconv"
 )
 
 func TestVm(t *testing.T) {
@@ -20,7 +21,7 @@ func TestVm(t *testing.T) {
 		t.Error("OVIRT_URL is not set")
 	}
 	api, err := ovirtapi.NewAPI(url, username, password)
-	api.Debug = true
+	api.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
 		t.Error("error creating api connection", err)
 		return
