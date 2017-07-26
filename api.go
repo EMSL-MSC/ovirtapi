@@ -76,7 +76,7 @@ func NewAPI(endpoint string, username string, password string) (*API, error) {
 	}
 	body, err := api.Request("GET", endpointURL, nil)
 	if err != nil {
-		return nil, errors.New("Error connecting to endpoint")
+		return nil, err
 	}
 	xml.Unmarshal(body, &api)
 	return api, nil
@@ -133,13 +133,13 @@ func (api *API) GetLink(rel string) (*url.URL, error) {
 			return api.ResolveLink(link.Href), nil
 		}
 	}
-	return nil, errors.New("Link not found")
+	return nil, errors.New("api does not have %s link", rel)
 }
 
 func (api *API) GetLinkBody(link string, id string) ([]byte, error) {
 	url, err := api.GetLink(link)
 	if err != nil {
-		return nil, errors.New("API missing vms url")
+		return nil, err
 	}
 	if id != "" {
 		url.Path += "/" + id
