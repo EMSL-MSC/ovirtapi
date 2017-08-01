@@ -7,11 +7,11 @@ import (
 
 type OvirtObject struct {
 	Link
-	Api         *API   `xml:"-"`
-	Name        string `xml:"name"`
-	Description string `xml:"description,omitempty"`
-	Actions     []Link `xml:"actions>link,omitempty"`
-	Links       []Link `xml:"link,omitempty"`
+	Api         *API   `json:"-"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Actions     []Link `json:"actions>link,omitempty"`
+	Links       []Link `json:"link,omitempty"`
 }
 
 func (ovirtObject *OvirtObject) DoAction(action string) (err error) {

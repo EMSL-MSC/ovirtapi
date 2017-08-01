@@ -13,9 +13,9 @@ import (
 )
 
 type Link struct {
-	Href string `xml:"href,attr"`
-	Rel  string `xml:"rel,attr,omitempty"`
-	Id   string `xml:"id,attr,omitempty"`
+	Href string `json:"href"`
+	Rel  string `json:"rel,omitempty"`
+	Id   string `json:"id,omitempty"`
 }
 
 type API struct {
@@ -23,45 +23,45 @@ type API struct {
 	UserName       string
 	Password       string
 	Debug          bool
-	Links          []Link `xml:"link"`
+	Links          []Link `json:"link"`
 	SpecialObjects struct {
-		Links Link `xml:"link"`
-	} `xml:"special_objects"`
+		Links Link `json:"link"`
+	} `json:"special_objects"`
 	ProductInfo struct {
-		Name    string `xml:"name"`
-		Vendor  string `xml:"vendor"`
+		Name    string `json:"name"`
+		Vendor  string `json:"vendor"`
 		Version struct {
-			Major       int    `xml:"major"`
-			Minor       int    `xml:"minor"`
-			Revision    int    `xml:"revision"`
-			Build       int    `xml:"build"`
-			FullVersion string `xml:"full_version"`
-		} `xml:"version"`
-	} `xml:"product_info"`
+			Major       int    `json:"major"`
+			Minor       int    `json:"minor"`
+			Revision    int    `json:"revision"`
+			Build       int    `json:"build"`
+			FullVersion string `json:"full_version"`
+		} `json:"version"`
+	} `json:"product_info"`
 	Summary struct {
 		Vms struct {
-			Active int `xml:"active"`
-			Total  int `xml:"total"`
-		} `xml:"vms"`
+			Active int `json:"active"`
+			Total  int `json:"total"`
+		} `json:"vms"`
 		Hosts struct {
-			Active int `xml:"active"`
-			Total  int `xml:"total"`
-		} `xml:"hosts"`
+			Active int `json:"active"`
+			Total  int `json:"total"`
+		} `json:"hosts"`
 		Users struct {
-			Active int `xml:"active"`
-			Total  int `xml:"total"`
-		} `xml:"users"`
+			Active int `json:"active"`
+			Total  int `json:"total"`
+		} `json:"users"`
 		StorageDomains struct {
-			Active int `xml:"active"`
-			Total  int `xml:"total"`
-		} `xml:"storage_domains"`
-	} `xml:"summary"`
+			Active int `json:"active"`
+			Total  int `json:"total"`
+		} `json:"storage_domains"`
+	} `json:"summary"`
 }
 
 type Fault struct {
-	XMLName xml.Name `xml:"fault"`
-	Detail  string   `xml:"detail"`
-	Reason  string   `xml:"reason"`
+	XMLName xml.Name `json:"fault"`
+	Detail  string   `json:"detail"`
+	Reason  string   `json:"reason"`
 }
 
 func NewAPI(endpoint string, username string, password string) (*API, error) {
@@ -92,8 +92,11 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 	if err != nil {
 		return nil, err
 	}
+	api.Debug = true
 	if reqBody != nil {
 		req.Header.Add("Content-Type", "application/xml")
+	} else {
+		req.Header.Add("Accept", "application/json")
 	}
 	req.SetBasicAuth(api.UserName, api.Password)
 	if api.Debug {
@@ -133,7 +136,8 @@ func (api *API) GetLink(rel string) (*url.URL, error) {
 			return api.ResolveLink(link.Href), nil
 		}
 	}
-	return nil, errors.New("api does not have %s link", rel)
+	return nil, fmt.Errorf("api does not have %s link", rel)
+
 }
 
 func (api *API) GetLinkBody(link string, id string) ([]byte, error) {

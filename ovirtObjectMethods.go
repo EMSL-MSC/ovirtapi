@@ -5,7 +5,7 @@
 package ovirtapi
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"reflect"
 )
 
@@ -15,20 +15,20 @@ func (api *API) GetVm(id string) (*Vm, error) {
 		return nil, err
 	}
 	object := api.NewVm()
-	err = xml.Unmarshal(body, object)
+	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
 	}
 	return object, err
 }
 
-func (api *API) GetAllVm() ([]*Vm, error) {
+func (api *API) GetAllVms() ([]*Vm, error) {
 	body, err := api.GetLinkBody(reflect.TypeOf(Vm{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
 	objects := []*Vm{}
-	err = xml.Unmarshal(body, &struct {
+	err = json.Unmarshal(body, &struct {
 		Objects *[]*Vm
 	}{&objects})
 	if err != nil {
@@ -45,7 +45,7 @@ func (api *API) NewVm() *Vm {
 }
 
 func (object *Vm) Save() error {
-	body, err := xml.MarshalIndent(object, "", "    ")
+	body, err := json.MarshalIndent(object, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (object *Vm) Save() error {
 		}
 	}
 	tempObject := Vm{OvirtObject: OvirtObject{Api: object.Api}}
-	err = xml.Unmarshal(body, &tempObject)
+	err = json.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {
 		return err
@@ -80,20 +80,20 @@ func (api *API) GetCluster(id string) (*Cluster, error) {
 		return nil, err
 	}
 	object := api.NewCluster()
-	err = xml.Unmarshal(body, object)
+	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
 	}
 	return object, err
 }
 
-func (api *API) GetAllCluster() ([]*Cluster, error) {
+func (api *API) GetAllClusters() ([]*Cluster, error) {
 	body, err := api.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
 	objects := []*Cluster{}
-	err = xml.Unmarshal(body, &struct {
+	err = json.Unmarshal(body, &struct {
 		Objects *[]*Cluster
 	}{&objects})
 	if err != nil {
@@ -110,7 +110,7 @@ func (api *API) NewCluster() *Cluster {
 }
 
 func (object *Cluster) Save() error {
-	body, err := xml.MarshalIndent(object, "", "    ")
+	body, err := json.MarshalIndent(object, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -131,7 +131,7 @@ func (object *Cluster) Save() error {
 		}
 	}
 	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
-	err = xml.Unmarshal(body, &tempObject)
+	err = json.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {
 		return err
@@ -145,20 +145,20 @@ func (api *API) GetDataCenter(id string) (*DataCenter, error) {
 		return nil, err
 	}
 	object := api.NewDataCenter()
-	err = xml.Unmarshal(body, object)
+	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
 	}
 	return object, err
 }
 
-func (api *API) GetAllDataCenter() ([]*DataCenter, error) {
+func (api *API) GetAllDataCenters() ([]*DataCenter, error) {
 	body, err := api.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
 	objects := []*DataCenter{}
-	err = xml.Unmarshal(body, &struct {
+	err = json.Unmarshal(body, &struct {
 		Objects *[]*DataCenter
 	}{&objects})
 	if err != nil {
@@ -175,7 +175,7 @@ func (api *API) NewDataCenter() *DataCenter {
 }
 
 func (object *DataCenter) Save() error {
-	body, err := xml.MarshalIndent(object, "", "    ")
+	body, err := json.MarshalIndent(object, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -196,7 +196,72 @@ func (object *DataCenter) Save() error {
 		}
 	}
 	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
-	err = xml.Unmarshal(body, &tempObject)
+	err = json.Unmarshal(body, &tempObject)
+	*object = tempObject
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (api *API) GetTemplate(id string) (*Template, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", id)
+	if err != nil {
+		return nil, err
+	}
+	object := api.NewTemplate()
+	err = json.Unmarshal(body, object)
+	if err != nil {
+		return nil, err
+	}
+	return object, err
+}
+
+func (api *API) GetAllTemplates() ([]*Template, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", "")
+	if err != nil {
+		return nil, err
+	}
+	objects := []*Template{}
+	err = json.Unmarshal(body, &struct {
+		Objects *[]*Template
+	}{&objects})
+	if err != nil {
+		return nil, err
+	}
+	for _, object := range objects {
+		object.Api = api
+	}
+	return objects, err
+}
+
+func (api *API) NewTemplate() *Template {
+	return &Template{OvirtObject: OvirtObject{Api: api}}
+}
+
+func (object *Template) Save() error {
+	body, err := json.MarshalIndent(object, "", "    ")
+	if err != nil {
+		return err
+	}
+	// If there is a link, it is an already saved object, we need to update it
+	if object.OvirtObject.Href != "" {
+		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
+	} else {
+		link, err := object.Api.GetLink(reflect.TypeOf(Template{}).Name() + "s")
+		if err != nil {
+			return err
+		}
+		body, err = object.Api.Request("POST", link, body)
+		if err != nil {
+			return err
+		}
+	}
+	tempObject := Template{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {
 		return err

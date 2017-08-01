@@ -2,7 +2,7 @@
 package ovirtapi
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"reflect"
   "github.com/cheekybits/genny/generic"
 )
@@ -15,20 +15,20 @@ func (api *API) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
 		return nil, err
 	}
 	object := api.NewOvirtObjectType()
-	err = xml.Unmarshal(body, object)
+	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
 	}
 	return object, err
 }
 
-func (api *API) GetAllOvirtObjectType() ([]*OvirtObjectType, error) {
+func (api *API) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
 	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
 	objects := []*OvirtObjectType{}
-	err = xml.Unmarshal(body, &struct {
+	err = json.Unmarshal(body, &struct {
 		Objects *[]*OvirtObjectType
 	}{&objects})
 	if err != nil {
@@ -45,7 +45,7 @@ func (api *API) NewOvirtObjectType() *OvirtObjectType {
 }
 
 func (object *OvirtObjectType) Save() error {
-	body, err := xml.MarshalIndent(object, "", "    ")
+	body, err := json.MarshalIndent(object, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (object *OvirtObjectType) Save() error {
 		}
 	}
 	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
-	err = xml.Unmarshal(body, &tempObject)
+	err = json.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {
 		return err

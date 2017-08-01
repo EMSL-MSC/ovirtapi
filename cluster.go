@@ -1,74 +1,69 @@
 package ovirtapi
 
-import (
-	"encoding/xml"
-)
-
 type Cluster struct {
 	OvirtObject
-	XMLName           xml.Name `xml:"cluster"`
-	BallooningEnabled string   `xml:"ballooning_enabled,omitempty"`
+	BallooningEnabled string `json:"ballooning_enabled,omitempty"`
 	Cpu               struct {
-		Architecture string `xml:"architecure,omitempty"`
-		Type         string `xml:"type,omitempty"`
-	} `xml:"cpu,omitempty"`
+		Architecture string `json:"architecure,omitempty"`
+		Type         string `json:"type,omitempty"`
+	} `json:"cpu,omitempty"`
 	CustomSchedulingPolicyProperties *struct {
 		Property []struct {
-			Name  string `xml:"name,omitempty"`
-			Value int    `xml:"value,omitempty"`
-		} `xml:"property,omitempty"`
-	} `xml:"CustomSchedulingPolicyProperties"`
+			Name  string `json:"name,omitempty"`
+			Value int    `json:"value,omitempty"`
+		} `json:"property,omitempty"`
+	} `json:"CustomSchedulingPolicyProperties"`
 	ErrorHandling *struct {
-		OnError string `xml:"on_error,omitempty"`
-	} `xml:"ErrorHandling,omitempty"`
+		OnError string `json:"on_error,omitempty"`
+	} `json:"ErrorHandling,omitempty"`
 	FencingPolicy *struct {
-		Enabled                  string `xml:"enabled,omitempty"`
+		Enabled                  string `json:"enabled,omitempty"`
 		SkipIfConnectivitybroken *struct {
-			Enabled   string `xml:"enabled,omitempty"`
-			Threshold int    `xml:"threshold,omitempty"`
-		} `xml:"skip_if_connectivity_broken,omitempty"`
-		SkipIfGlusterBricksUp     string `xml:"skip_if_gluster_bricks_up,omitempty"`
-		SkipIfGlusterQuorumNotMet string `xml:"skip_if_gluster_quorum_not_met,omitempty"`
+			Enabled   string `json:"enabled,omitempty"`
+			Threshold int    `json:"threshold,omitempty"`
+		} `json:"skip_if_connectivity_broken,omitempty"`
+		SkipIfGlusterBricksUp     string `json:"skip_if_gluster_bricks_up,omitempty"`
+		SkipIfGlusterQuorumNotMet string `json:"skip_if_gluster_quorum_not_met,omitempty"`
 		SkipIfSdActive            *struct {
-			Enabled string `xml:"enabled,omitempty"`
-		} `xml:"skip_if_sd_active,omitempty"`
-	} `xml:"fencing_policy,omitempty"`
-	GlusterService string `xml:"gluster_service,omitempty"`
-	HaReservation  string `xml:"ha_reservation,omitempty"`
+			Enabled string `json:"enabled,omitempty"`
+		} `json:"skip_if_sd_active,omitempty"`
+	} `json:"fencing_policy,omitempty"`
+	GlusterService string `json:"gluster_service,omitempty"`
+	HaReservation  string `json:"ha_reservation,omitempty"`
 	Ksm            *struct {
-		Enabled          string `xml:"enabled,omitempty"`
-		MergeAcrossNodes string `xml:"merge_across_nodes,omitempty"`
-	} `xml:"ksm,omitempty"`
-	MaintenanceReasonRequired string `xml:"maintenance_reason_required,omitempty"`
+		Enabled          string `json:"enabled,omitempty"`
+		MergeAcrossNodes string `json:"merge_across_nodes,omitempty"`
+	} `json:"ksm,omitempty"`
+	MaintenanceReasonRequired string `json:"maintenance_reason_required,omitempty"`
 	MemoryPolicy              *struct {
 		OverCommit *struct {
-			Percent int `xml:"percent,omitempty"`
-		} `xml:"over_commit,omitempty"`
+			Percent int `json:"percent,omitempty"`
+		} `json:"over_commit,omitempty"`
 		TransparentHugepages *struct {
-			Enabled string `xml:"enabled,omitempty"`
-		} `xml:"transparent_hugepages,omitempty"`
-	} `xml:"memory_policy,omitempty"`
+			Enabled string `json:"enabled,omitempty"`
+		} `json:"transparent_hugepages,omitempty"`
+	} `json:"memory_policy,omitempty"`
 	Migration *struct {
-		AutoConverge string `xml:"auto_converge,omitempty"`
+		AutoConverge string `json:"auto_converge,omitempty"`
 		Bandwidth    *struct {
-			AssignmentMethod string `xml:"assignment_method,omitempty"`
-		} `xml:"bandwidth,omitempty"`
-		Compressed string `xml:"compressed,omitempty"`
-	} `xml:"migration,omitempty"`
-	OptionalReason     string `xml:"optional_reason,omitempty"`
+			AssignmentMethod string `json:"assignment_method,omitempty"`
+		} `json:"bandwidth,omitempty"`
+		Compressed string `json:"compressed,omitempty"`
+	} `json:"migration,omitempty"`
+	OptionalReason     string `json:"optional_reason,omitempty"`
 	RequiredRngSources *struct {
-		RequiredRngSource string `xml:"required_rng_source,omitempty"`
-	} `xml:"required_rng_sources,omitempty"`
-	SwitchType      string `xml:"switch_type,omitempty"`
-	ThreadsAsCores  string `xml:"threads_as_cores,omitempty"`
-	TrustedService  string `xml:"trusted_service,omitempty"`
-	TunnelMigration string `xml:"tunnel_migration,omitempty"`
+		RequiredRngSource string `json:"required_rng_source,omitempty"`
+	} `json:"required_rng_sources,omitempty"`
+	SwitchType      string `json:"switch_type,omitempty"`
+	ThreadsAsCores  string `json:"threads_as_cores,omitempty"`
+	TrustedService  string `json:"trusted_service,omitempty"`
+	TunnelMigration string `json:"tunnel_migration,omitempty"`
 	Version         *struct {
-		Major int `xml:"major,omitempty"`
-		Minor int `xml:"minor,omitempty"`
-	} `xml:"version,omitempty"`
-	VirtService      string `xml:"virt_service,omitempty"`
-	DataCenter       *Link  `xml:"data_center,omitempty"`
-	MacPool          *Link  `xml:"mac_pool,omitempty"`
-	SchedulingPolicy *Link  `xml:"scheduling_policy,omitempty"`
+		Major int `json:"major,omitempty"`
+		Minor int `json:"minor,omitempty"`
+	} `json:"version,omitempty"`
+	VirtService      string `json:"virt_service,omitempty"`
+	DataCenter       *Link  `json:"data_center,omitempty"`
+	MacPool          *Link  `json:"mac_pool,omitempty"`
+	SchedulingPolicy *Link  `json:"scheduling_policy,omitempty"`
 }

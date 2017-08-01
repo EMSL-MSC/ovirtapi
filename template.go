@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 )
 
-type Vm struct {
+type Template struct {
 	OvirtObject
-	XMLName xml.Name `xml:"vm"`
+	XMLName xml.Name `xml:"template"`
 	Comment string   `xml:"comment,omitempty"`
 	Bios    *struct {
 		BootMenu struct {
@@ -42,9 +42,6 @@ type Vm struct {
 		Enabled  bool `xml:"enabled,omitempty"`
 		Priority int  `xml:"priority,omitempty"`
 	} `xml:"high_availability,omitempty"`
-	// Io *struct {
-	// 	Threads int `xml:"threads,omitempty"`
-	// } `xml:"io,omitempty"`
 	LargeIcon    *Link `xml:"large_icon,omitempty"`
 	Memory       int   `xml:"memory,omitempty"`
 	MemoryPolicy *struct {
@@ -90,4 +87,10 @@ type Vm struct {
 	InstanceType     *Link  `xml:"instance_type,omitempty"`
 	OriginalTemplate *Link  `xml:"original_template,omitempty"`
 	Template         *Link  `xml:"template,omitempty"`
+	Version          *struct {
+		VersionName   string `xml:"version_name,omitempty"`
+		VersionNumber int    `xml:"version_number,omitempty"`
+		BaseTemplate  *Link  `xml:"base_template,omitempty"`
+	} `xml:"version,omitempty"`
+	VM *Vm `xml:"vm,omitempty"`
 }
