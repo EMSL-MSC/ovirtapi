@@ -30,7 +30,7 @@ func TestTemplate(t *testing.T) {
 	}
 	newTemplate := api.NewTemplate()
 	newTemplate.Name = "test-Template"
-	allVMs, err := api.GetAllVms()
+	allVMs, err := api.GetAllVMs()
 	if err != nil {
 		t.Error("Error finding a vm to duplicate")
 		return

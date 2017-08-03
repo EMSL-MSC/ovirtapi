@@ -123,7 +123,7 @@ type VMPlacementPolicy struct {
 	//Host
 }
 
-type Vm struct {
+type VM struct {
 	OvirtObject
 	Comment                    string             `json:"comment,omitempty"`
 	Bios                       *Bios              `json:"bios,omitempty"`
@@ -146,7 +146,7 @@ type Vm struct {
 	TimeZone                   *TimeZone          `json:"time_zone,omitempty"`
 	Type                       string             `json:"type,omitempty"`
 	USB                        *USB               `json:"usb,omitempty"`
-	Cluster                    *Link              `json:"cluster,omitempty"`
+	Cluster                    *Cluster           `json:"cluster,omitempty"`
 	CpuProfile                 *Link              `json:"cpu_profile,omitempty"`
 	Quota                      *Link              `json:"quota,omitempty"`
 	NextRunConfigurationExists string             `json:"next_run_configuration_exists,omitempty"`
@@ -159,5 +159,5 @@ type Vm struct {
 	Host                       *Link              `json:"host,omitempty"`
 	InstanceType               *Link              `json:"instance_type,omitempty"`
 	OriginalTemplate           *Link              `json:"original_template,omitempty"`
-	Template                   *Link              `json:"template,omitempty"`
+	Template                   *Template          `json:"template,omitempty"`
 }

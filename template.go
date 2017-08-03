@@ -42,5 +42,5 @@ type Template struct {
 	OriginalTemplate           *Link              `json:"original_template,omitempty"`
 	Template                   *Link              `json:"template,omitempty"`
 	Version                    *TemplateVersion   `json:"version,omitempty"`
-	VM                         *Vm                `json:"vm,omitempty"`
+	VM                         *VM                `json:"vm,omitempty"`
 }

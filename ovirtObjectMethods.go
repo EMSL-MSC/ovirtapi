@@ -9,12 +9,12 @@ import (
 	"reflect"
 )
 
-func (api *API) GetVm(id string) (*Vm, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Vm{}).Name()+"s", id)
+func (api *API) GetVM(id string) (*VM, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewVm()
+	object := api.NewVM()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -22,14 +22,14 @@ func (api *API) GetVm(id string) (*Vm, error) {
 	return object, err
 }
 
-func (api *API) GetAllVms() ([]*Vm, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Vm{}).Name()+"s", "")
+func (api *API) GetAllVMs() ([]*VM, error) {
+	body, err := api.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
-	objects := []*Vm{}
+	objects := []*VM{}
 	err = json.Unmarshal(body, &struct {
-		Vm *[]*Vm
+		VM *[]*VM
 	}{&objects})
 	if err != nil {
 		return nil, err
@@ -40,11 +40,11 @@ func (api *API) GetAllVms() ([]*Vm, error) {
 	return objects, err
 }
 
-func (api *API) NewVm() *Vm {
-	return &Vm{OvirtObject: OvirtObject{Api: api}}
+func (api *API) NewVM() *VM {
+	return &VM{OvirtObject: OvirtObject{Api: api}}
 }
 
-func (object *Vm) Save() error {
+func (object *VM) Save() error {
 	body, err := json.MarshalIndent(object, "", "    ")
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (object *Vm) Save() error {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(Vm{}).Name() + "s")
+		link, err := object.Api.GetLink(reflect.TypeOf(VM{}).Name() + "s")
 		if err != nil {
 			return err
 		}
@@ -65,7 +65,7 @@ func (object *Vm) Save() error {
 			return err
 		}
 	}
-	tempObject := Vm{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := VM{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
 	*object = tempObject
 	if err != nil {

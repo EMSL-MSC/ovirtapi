@@ -8,7 +8,7 @@ import (
 	"github.com/emsl-msc/ovirtapi"
 )
 
-func TestVm(t *testing.T) {
+func TestVM(t *testing.T) {
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")
@@ -27,30 +27,34 @@ func TestVm(t *testing.T) {
 		t.Error("error creating api connection", err)
 		return
 	}
-	newVm := api.NewVm()
-	newVm.Name = "test-vm"
-	newVm.Template = &ovirtapi.Link{
-		Href: "/ovirt-engine/api/templates/00000000-0000-0000-0000-000000000000",
-		Id:   "00000000-0000-0000-0000-000000000000",
+	newVM := api.NewVM()
+	newVM.Name = "test-vm"
+	allTemplates, err := api.GetAllTemplates()
+	if err != nil {
+		t.Error("Error finding a Template to assign to a test vm")
+		return
 	}
-	newVm.Cluster = &ovirtapi.Link{
-		Href: "/ovirt-engine/api/clusters/00000002-0002-0002-0002-00000000017a",
-		Id:   "00000002-0002-0002-0002-00000000017a",
+	newVM.Template = allTemplates[0]
+	allClusters, err := api.GetAllClusters()
+	if err != nil {
+		t.Error("Error finding a Cluster to assign to a test vm")
+		return
 	}
-	err = newVm.Save()
+	newVM.Cluster = allClusters[0]
+	err = newVM.Save()
 	if err != nil {
 		t.Fatal("Error creating new vm", err)
 	}
-	retrievedVm, err := api.GetVm(newVm.Id)
+	retrievedVM, err := api.GetVM(newVM.Id)
 	if err != nil {
 		t.Fatal("Error retrieving vm", err)
 	}
-	retrievedVm.Description = "about to delete"
-	err = retrievedVm.Save()
+	retrievedVM.Description = "about to delete"
+	err = retrievedVM.Save()
 	if err != nil {
 		t.Fatal("Error updating vm", err)
 	}
-	err = retrievedVm.Delete()
+	err = retrievedVM.Delete()
 	if err != nil {
 		t.Fatal("Error Deleting vm", err)
 	}
