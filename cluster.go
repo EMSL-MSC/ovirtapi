@@ -1,17 +1,16 @@
 package ovirtapi
 
+type Property struct {
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
 type Cluster struct {
 	OvirtObject
-	BallooningEnabled string `json:"ballooning_enabled,omitempty"`
-	Cpu               struct {
-		Architecture string `json:"architecure,omitempty"`
-		Type         string `json:"type,omitempty"`
-	} `json:"cpu,omitempty"`
+	BallooningEnabled                string `json:"ballooning_enabled,omitempty"`
+	Cpu                              *CPU   `json:"cpu,omitempty"`
 	CustomSchedulingPolicyProperties *struct {
-		Property []struct {
-			Name  string `json:"name,omitempty"`
-			Value string `json:"value,omitempty"`
-		} `json:"property,omitempty"`
+		Property []Property `json:"property,omitempty"`
 	} `json:"custom_scheduling_policy_properties,omitempty"`
 	ErrorHandling *struct {
 		OnError string `json:"on_error,omitempty"`

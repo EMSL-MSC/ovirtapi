@@ -10,12 +10,14 @@ type OvirtObject struct {
 	Api         *API   `json:"-"`
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
-	Actions     []Link `json:"actions>link,omitempty"`
+	Actions     struct {
+		Links     []Link `json:"link,omitempty"`
+	} `json:"actions,omitempty"`
 	Links       []Link `json:"link,omitempty"`
 }
 
 func (ovirtObject *OvirtObject) DoAction(action string) (err error) {
-	for _, link := range ovirtObject.Actions {
+	for _, link := range ovirtObject.Actions.Links {
 		if link.Rel == action {
 			_, err = ovirtObject.Api.Request("POST", ovirtObject.Api.ResolveLink(link.Href), nil)
 			return

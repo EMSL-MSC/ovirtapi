@@ -29,7 +29,7 @@ func TestCluster(t *testing.T) {
 	}
 	newCluster := api.NewCluster()
 	newCluster.Name = "test-cluster"
-	newCluster.Cpu.Type = "Intel Haswell-noTSX Family"
+	newCluster.Cpu = &ovirtapi.CPU{Type: "Intel Haswell-noTSX Family"}
 	newCluster.DataCenter = &ovirtapi.Link{Id: "00000001-0001-0001-0001-000000000311"}
 	err = newCluster.Save()
 	if err != nil {
