@@ -22,6 +22,23 @@ func (api *API) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
 	return object, err
 }
 
+func (object *OvirtObjectType) Update() (error) {
+	if object.OvirtObject.Href == "" {
+		return fmt.Errorf("Object has not been saved to the server")
+	}
+	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
+}
+
 func (api *API) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
 	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", "")
 	if err != nil {
@@ -67,9 +84,9 @@ func (object *OvirtObjectType) Save() error {
 	}
 	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
-	*object = tempObject
 	if err != nil {
 		return err
 	}
+	*object = tempObject
 	return nil
 }

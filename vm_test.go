@@ -1,9 +1,11 @@
 package ovirtapi_test
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/emsl-msc/ovirtapi"
 )
@@ -43,19 +45,32 @@ func TestVM(t *testing.T) {
 	newVM.Cluster = allClusters[0]
 	err = newVM.Save()
 	if err != nil {
-		t.Fatal("Error creating new vm", err)
+		t.Error("Error creating new vm", err)
+		return
 	}
 	retrievedVM, err := api.GetVM(newVM.Id)
 	if err != nil {
-		t.Fatal("Error retrieving vm", err)
+		t.Error("Error retrieving vm", err)
+		return
+	}
+	for count := 0; retrievedVM.Status != "down" && count < 30; count++ {
+		time.Sleep(2 * time.Second)
+		err = retrievedVM.Update()
+		if err != nil {
+			t.Error("Error updating VM", err)
+			return
+		}
 	}
 	retrievedVM.Description = "about to delete"
 	err = retrievedVM.Save()
 	if err != nil {
-		t.Fatal("Error updating vm", err)
+		fmt.Printf("%s\n", retrievedVM.Status)
+		t.Error("Error updating vm", err)
+		return
 	}
 	err = retrievedVM.Delete()
 	if err != nil {
-		t.Fatal("Error Deleting vm", err)
+		t.Error("Error Deleting vm", err)
+		return
 	}
 }

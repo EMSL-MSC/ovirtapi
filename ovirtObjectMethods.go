@@ -6,6 +6,7 @@ package ovirtapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 )
 
@@ -20,6 +21,23 @@ func (api *API) GetVM(id string) (*VM, error) {
 		return nil, err
 	}
 	return object, err
+}
+
+func (object *VM) Update() error {
+	if object.OvirtObject.Href == "" {
+		return fmt.Errorf("Object has not been saved to the server")
+	}
+	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := VM{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
 }
 
 func (api *API) GetAllVMs() ([]*VM, error) {
@@ -67,10 +85,10 @@ func (object *VM) Save() error {
 	}
 	tempObject := VM{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
-	*object = tempObject
 	if err != nil {
 		return err
 	}
+	*object = tempObject
 	return nil
 }
 
@@ -85,6 +103,23 @@ func (api *API) GetCluster(id string) (*Cluster, error) {
 		return nil, err
 	}
 	return object, err
+}
+
+func (object *Cluster) Update() error {
+	if object.OvirtObject.Href == "" {
+		return fmt.Errorf("Object has not been saved to the server")
+	}
+	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
 }
 
 func (api *API) GetAllClusters() ([]*Cluster, error) {
@@ -132,10 +167,10 @@ func (object *Cluster) Save() error {
 	}
 	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
-	*object = tempObject
 	if err != nil {
 		return err
 	}
+	*object = tempObject
 	return nil
 }
 
@@ -150,6 +185,23 @@ func (api *API) GetDataCenter(id string) (*DataCenter, error) {
 		return nil, err
 	}
 	return object, err
+}
+
+func (object *DataCenter) Update() error {
+	if object.OvirtObject.Href == "" {
+		return fmt.Errorf("Object has not been saved to the server")
+	}
+	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
 }
 
 func (api *API) GetAllDataCenters() ([]*DataCenter, error) {
@@ -197,10 +249,10 @@ func (object *DataCenter) Save() error {
 	}
 	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
-	*object = tempObject
 	if err != nil {
 		return err
 	}
+	*object = tempObject
 	return nil
 }
 
@@ -215,6 +267,23 @@ func (api *API) GetTemplate(id string) (*Template, error) {
 		return nil, err
 	}
 	return object, err
+}
+
+func (object *Template) Update() error {
+	if object.OvirtObject.Href == "" {
+		return fmt.Errorf("Object has not been saved to the server")
+	}
+	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := Template{OvirtObject: OvirtObject{Api: object.Api}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
 }
 
 func (api *API) GetAllTemplates() ([]*Template, error) {
@@ -262,9 +331,9 @@ func (object *Template) Save() error {
 	}
 	tempObject := Template{OvirtObject: OvirtObject{Api: object.Api}}
 	err = json.Unmarshal(body, &tempObject)
-	*object = tempObject
 	if err != nil {
 		return err
 	}
+	*object = tempObject
 	return nil
 }

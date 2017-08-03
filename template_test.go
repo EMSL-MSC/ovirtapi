@@ -51,7 +51,7 @@ func TestTemplate(t *testing.T) {
 	}
 	for retrievedTemplate.Status == "locked" {
 		time.Sleep(2 * time.Second)
-		retrievedTemplate, err = api.GetTemplate(newTemplate.Id)
+		err = retrievedTemplate.Update()
 		if err != nil {
 			t.Fatal("Error retrieving Template", err)
 		}
@@ -63,7 +63,7 @@ func TestTemplate(t *testing.T) {
 	}
 	for retrievedTemplate.Status == "locked" {
 		time.Sleep(2 * time.Second)
-		retrievedTemplate, err = api.GetTemplate(newTemplate.Id)
+		err = retrievedTemplate.Update()
 		if err != nil {
 			t.Fatal("Error retrieving Template", err)
 		}
