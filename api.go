@@ -2,7 +2,7 @@ package ovirtapi
 
 import (
 	"bytes"
-	"encoding/xml"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -13,7 +13,7 @@ import (
 )
 
 type Link struct {
-	Href string `json:"href"`
+	Href string `json:"href,omitempty"`
 	Rel  string `json:"rel,omitempty"`
 	Id   string `json:"id,omitempty"`
 }
@@ -25,7 +25,7 @@ type API struct {
 	Debug          bool
 	Links          []Link `json:"link"`
 	SpecialObjects struct {
-		Links Link `json:"link"`
+		Links []Link `json:"link"`
 	} `json:"special_objects"`
 	ProductInfo struct {
 		Name    string `json:"name"`
@@ -58,10 +58,18 @@ type API struct {
 	} `json:"summary"`
 }
 
-type Fault struct {
-	XMLName xml.Name `json:"fault"`
-	Detail  string   `json:"detail"`
-	Reason  string   `json:"reason"`
+type RequestError struct {
+	StatusCode int
+	Detail     string `json:"detail"`
+	Reason     string `json:"reason"`
+}
+
+func (f RequestError) Error() string {
+	if f.Reason != "" && f.Detail != "" {
+		return fmt.Sprintf("Server Error, Reason: %s, Detail: %s", f.Reason, f.Detail)
+	} else {
+		return fmt.Sprintf("Error getting response from server (Response code %d )", f.StatusCode)
+	}
 }
 
 func NewAPI(endpoint string, username string, password string) (*API, error) {
@@ -78,7 +86,7 @@ func NewAPI(endpoint string, username string, password string) (*API, error) {
 	if err != nil {
 		return nil, err
 	}
-	xml.Unmarshal(body, &api)
+	json.Unmarshal(body, &api)
 	return api, nil
 }
 
@@ -92,12 +100,10 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 	if err != nil {
 		return nil, err
 	}
-	api.Debug = true
 	if reqBody != nil {
-		req.Header.Add("Content-Type", "application/xml")
-	} else {
-		req.Header.Add("Accept", "application/json")
+		req.Header.Add("Content-Type", "application/json")
 	}
+	req.Header.Add("Accept", "application/json")
 	req.SetBasicAuth(api.UserName, api.Password)
 	if api.Debug {
 		dump, _ := httputil.DumpRequestOut(req, true)
@@ -113,15 +119,12 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fault := Fault{}
+		fault := RequestError{resp.StatusCode, "", ""}
 		respBody, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
-			xml.Unmarshal(respBody, &fault)
-			if fault.Reason != "" {
-				return nil, fmt.Errorf("Server Error, Reason: %s, Detail: %s", fault.Reason, fault.Detail)
-			}
+			json.Unmarshal(respBody, &fault)
 		}
-		return nil, fmt.Errorf("Error getting response from server (Response code %d )", resp.StatusCode)
+		return nil, fault
 	}
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

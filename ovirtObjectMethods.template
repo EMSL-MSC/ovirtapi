@@ -29,7 +29,7 @@ func (api *API) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
 	}
 	objects := []*OvirtObjectType{}
 	err = json.Unmarshal(body, &struct {
-		Objects *[]*OvirtObjectType
+		OvirtObjectType *[]*OvirtObjectType
 	}{&objects})
 	if err != nil {
 		return nil, err

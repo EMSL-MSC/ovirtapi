@@ -29,7 +29,7 @@ func (api *API) GetAllVms() ([]*Vm, error) {
 	}
 	objects := []*Vm{}
 	err = json.Unmarshal(body, &struct {
-		Objects *[]*Vm
+		Vm *[]*Vm
 	}{&objects})
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (api *API) GetAllClusters() ([]*Cluster, error) {
 	}
 	objects := []*Cluster{}
 	err = json.Unmarshal(body, &struct {
-		Objects *[]*Cluster
+		Cluster *[]*Cluster
 	}{&objects})
 	if err != nil {
 		return nil, err
@@ -159,7 +159,7 @@ func (api *API) GetAllDataCenters() ([]*DataCenter, error) {
 	}
 	objects := []*DataCenter{}
 	err = json.Unmarshal(body, &struct {
-		Objects *[]*DataCenter
+		DataCenter *[]*DataCenter
 	}{&objects})
 	if err != nil {
 		return nil, err
@@ -224,7 +224,7 @@ func (api *API) GetAllTemplates() ([]*Template, error) {
 	}
 	objects := []*Template{}
 	err = json.Unmarshal(body, &struct {
-		Objects *[]*Template
+		Template *[]*Template
 	}{&objects})
 	if err != nil {
 		return nil, err

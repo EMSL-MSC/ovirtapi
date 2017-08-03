@@ -37,12 +37,10 @@ func TestVm(t *testing.T) {
 		Href: "/ovirt-engine/api/clusters/00000002-0002-0002-0002-00000000017a",
 		Id:   "00000002-0002-0002-0002-00000000017a",
 	}
-	api.Debug = true
 	err = newVm.Save()
 	if err != nil {
 		t.Fatal("Error creating new vm", err)
 	}
-	api.Debug = false
 	retrievedVm, err := api.GetVm(newVm.Id)
 	if err != nil {
 		t.Fatal("Error retrieving vm", err)

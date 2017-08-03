@@ -2,10 +2,11 @@ package ovirtapi_test
 
 import (
 	"fmt"
-	"github.com/emsl-msc/ovirtapi"
 	"os"
 	"strconv"
 	"testing"
+
+	"github.com/emsl-msc/ovirtapi"
 )
 
 func TestDataCenter(t *testing.T) {

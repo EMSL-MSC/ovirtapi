@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/emsl-msc/ovirtapi"
 )
@@ -29,13 +30,17 @@ func TestTemplate(t *testing.T) {
 	}
 	newTemplate := api.NewTemplate()
 	newTemplate.Name = "test-Template"
-	api.Debug = true
 	allVMs, err := api.GetAllVms()
 	if err != nil {
 		t.Error("Error finding a vm to duplicate")
 		return
 	}
-	newTemplate.VM = allVMs[0]
+	for _, vm := range allVMs {
+		if vm.Status != "up" && vm.Status != "locked" {
+			newTemplate.VM = vm
+			break
+		}
+	}
 	err = newTemplate.Save()
 	if err != nil {
 		t.Fatal("Error creating new Template", err)
@@ -44,10 +49,24 @@ func TestTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error retrieving Template", err)
 	}
+	for retrievedTemplate.Status == "locked" {
+		time.Sleep(2 * time.Second)
+		retrievedTemplate, err = api.GetTemplate(newTemplate.Id)
+		if err != nil {
+			t.Fatal("Error retrieving Template", err)
+		}
+	}
 	retrievedTemplate.Description = "about to delete"
 	err = retrievedTemplate.Save()
 	if err != nil {
 		t.Fatal("Error updating Template", err)
+	}
+	for retrievedTemplate.Status == "locked" {
+		time.Sleep(2 * time.Second)
+		retrievedTemplate, err = api.GetTemplate(newTemplate.Id)
+		if err != nil {
+			t.Fatal("Error retrieving Template", err)
+		}
 	}
 	err = retrievedTemplate.Delete()
 	if err != nil {

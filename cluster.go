@@ -10,9 +10,9 @@ type Cluster struct {
 	CustomSchedulingPolicyProperties *struct {
 		Property []struct {
 			Name  string `json:"name,omitempty"`
-			Value int    `json:"value,omitempty"`
+			Value string `json:"value,omitempty"`
 		} `json:"property,omitempty"`
-	} `json:"CustomSchedulingPolicyProperties"`
+	} `json:"custom_scheduling_policy_properties,omitempty"`
 	ErrorHandling *struct {
 		OnError string `json:"on_error,omitempty"`
 	} `json:"ErrorHandling,omitempty"`
@@ -20,7 +20,7 @@ type Cluster struct {
 		Enabled                  string `json:"enabled,omitempty"`
 		SkipIfConnectivitybroken *struct {
 			Enabled   string `json:"enabled,omitempty"`
-			Threshold int    `json:"threshold,omitempty"`
+			Threshold string `json:"threshold,omitempty"`
 		} `json:"skip_if_connectivity_broken,omitempty"`
 		SkipIfGlusterBricksUp     string `json:"skip_if_gluster_bricks_up,omitempty"`
 		SkipIfGlusterQuorumNotMet string `json:"skip_if_gluster_quorum_not_met,omitempty"`
@@ -37,7 +37,7 @@ type Cluster struct {
 	MaintenanceReasonRequired string `json:"maintenance_reason_required,omitempty"`
 	MemoryPolicy              *struct {
 		OverCommit *struct {
-			Percent int `json:"percent,omitempty"`
+			Percent string `json:"percent,omitempty"`
 		} `json:"over_commit,omitempty"`
 		TransparentHugepages *struct {
 			Enabled string `json:"enabled,omitempty"`
@@ -52,15 +52,15 @@ type Cluster struct {
 	} `json:"migration,omitempty"`
 	OptionalReason     string `json:"optional_reason,omitempty"`
 	RequiredRngSources *struct {
-		RequiredRngSource string `json:"required_rng_source,omitempty"`
+		RequiredRngSource []string `json:"required_rng_source,omitempty"`
 	} `json:"required_rng_sources,omitempty"`
 	SwitchType      string `json:"switch_type,omitempty"`
 	ThreadsAsCores  string `json:"threads_as_cores,omitempty"`
 	TrustedService  string `json:"trusted_service,omitempty"`
 	TunnelMigration string `json:"tunnel_migration,omitempty"`
 	Version         *struct {
-		Major int `json:"major,omitempty"`
-		Minor int `json:"minor,omitempty"`
+		Major string `json:"major,omitempty"`
+		Minor string `json:"minor,omitempty"`
 	} `json:"version,omitempty"`
 	VirtService      string `json:"virt_service,omitempty"`
 	DataCenter       *Link  `json:"data_center,omitempty"`

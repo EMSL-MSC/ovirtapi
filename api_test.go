@@ -1,10 +1,9 @@
 package ovirtapi_test
 
 import (
+	"github.com/emsl-msc/ovirtapi"
 	"os"
 	"testing"
-	"fmt"
-	"github.com/emsl-msc/ovirtapi"
 )
 
 func TestNewAPI(t *testing.T) {
@@ -20,12 +19,11 @@ func TestNewAPI(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	api, err := ovirtapi.NewAPI(url, username, password)
+	_, err := ovirtapi.NewAPI(url, username, password)
 	if err != nil {
 		t.Fatal("Did not create new API", err)
 		return
 	}
-	fmt.Printf("%+v\n", api)
 	_, err = ovirtapi.NewAPI(url, "baduser", "badpass")
 	if err == nil {
 		t.Error("Did not fail when passed bad password", err)

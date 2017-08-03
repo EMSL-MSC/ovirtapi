@@ -1,10 +1,11 @@
 package ovirtapi_test
 
 import (
-	"github.com/emsl-msc/ovirtapi"
 	"os"
 	"strconv"
 	"testing"
+
+	"github.com/emsl-msc/ovirtapi"
 )
 
 func TestCluster(t *testing.T) {
@@ -28,7 +29,6 @@ func TestCluster(t *testing.T) {
 	}
 	newCluster := api.NewCluster()
 	newCluster.Name = "test-cluster"
-	newCluster.Cpu.Architecture = "x86_64"
 	newCluster.Cpu.Type = "Intel Haswell-noTSX Family"
 	newCluster.DataCenter = &ovirtapi.Link{Id: "00000001-0001-0001-0001-000000000311"}
 	err = newCluster.Save()
