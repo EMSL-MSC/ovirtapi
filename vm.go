@@ -161,3 +161,32 @@ type VM struct {
 	OriginalTemplate           *Link              `json:"original_template,omitempty"`
 	Template                   *Template          `json:"template,omitempty"`
 }
+
+func (vm *VM) CancelMigration() (err error) {
+	err = vm.DoAction("cancelmigration", struct{}{})
+	return
+}
+
+func (vm *VM) Start(async, filter, pause, useCloudInit, useSysprep string, nextBootVM *VM) (err error) {
+	err = vm.DoAction("start", struct {
+		Async        string `json:"async,omitempty"`
+		Filter       string `json:"filter,omitempty"`
+		Pause        string `json:"pause,omitempty"`
+		UseCloudInit string `json:"use_cloud_init,omitempty"`
+		UseSysPrep   string `json:"use_sys_prep,omitempty"`
+		VM           *VM    `json:"vm,omitempty"`
+	}{
+		async,
+		filter,
+		pause,
+		useCloudInit,
+		useSysprep,
+		nextBootVM,
+	})
+	return
+}
+
+func (vm *VM) Stop() (err error) {
+	err = vm.DoAction("stop", struct{}{})
+	return
+}

@@ -31,6 +31,9 @@ func TestVM(t *testing.T) {
 	}
 	newVM := api.NewVM()
 	newVM.Name = "test-vm"
+	display := ovirtapi.Display{}
+	display.Type = "vnc"
+	newVM.Display = &display
 	allTemplates, err := api.GetAllTemplates()
 	if err != nil {
 		t.Error("Error finding a Template to assign to a test vm")
@@ -61,12 +64,22 @@ func TestVM(t *testing.T) {
 			return
 		}
 	}
+	retrievedVM.Start("", "", "", "", "", nil)
+	retrievedVM.Stop()
 	retrievedVM.Description = "about to delete"
 	err = retrievedVM.Save()
 	if err != nil {
 		fmt.Printf("%s\n", retrievedVM.Status)
 		t.Error("Error updating vm", err)
 		return
+	}
+	for count := 0; retrievedVM.Status != "down" && count < 30; count++ {
+		time.Sleep(2 * time.Second)
+		err = retrievedVM.Update()
+		if err != nil {
+			t.Error("Error updating VM", err)
+			return
+		}
 	}
 	err = retrievedVM.Delete()
 	if err != nil {
