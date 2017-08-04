@@ -65,7 +65,7 @@ func TestVM(t *testing.T) {
 		}
 	}
 	retrievedVM.Start("", "", "", "", "", nil)
-	retrievedVM.Stop()
+	retrievedVM.Stop("false")
 	retrievedVM.Description = "about to delete"
 	err = retrievedVM.Save()
 	if err != nil {
