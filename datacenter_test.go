@@ -36,7 +36,7 @@ func TestDataCenter(t *testing.T) {
 		fmt.Printf("%+v\n", err)
 		t.Fatal("Error creating new data center", err)
 	}
-	retrievedDataCenter, err := con.GetDataCenter(newDataCenter.Id)
+	retrievedDataCenter, err := con.GetDataCenter(newDataCenter.ID)
 	if err != nil {
 		t.Fatal("Error retrieving data center", err)
 	}

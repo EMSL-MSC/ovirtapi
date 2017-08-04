@@ -28,11 +28,11 @@ func (object *OvirtObjectType) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
-	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
 	if err != nil {
 		return err
 	}
-	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -54,13 +54,13 @@ func (con *Connection) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = con
+		object.Con = con
 	}
 	return objects, err
 }
 
 func (con *Connection) NewOvirtObjectType() *OvirtObjectType {
-	return &OvirtObjectType{OvirtObject: OvirtObject{Api: con}}
+	return &OvirtObjectType{OvirtObject: OvirtObject{Con: con}}
 }
 
 func (object *OvirtObjectType) Save() error {
@@ -70,21 +70,21 @@ func (object *OvirtObjectType) Save() error {
 	}
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
-		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
 		if err != nil {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(OvirtObjectType{}).Name() + "s")
+		link, err := object.Con.GetLink(reflect.TypeOf(OvirtObjectType{}).Name() + "s")
 		if err != nil {
 			return err
 		}
-		body, err = object.Api.Request("POST", link, body)
+		body, err = object.Con.Request("POST", link, body)
 		if err != nil {
 			return err
 		}
 	}
-	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := OvirtObjectType{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err

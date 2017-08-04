@@ -45,7 +45,7 @@ func TestTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error creating new Template", err)
 	}
-	retrievedTemplate, err := con.GetTemplate(newTemplate.Id)
+	retrievedTemplate, err := con.GetTemplate(newTemplate.ID)
 	if err != nil {
 		t.Fatal("Error retrieving Template", err)
 	}

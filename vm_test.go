@@ -51,7 +51,7 @@ func TestVM(t *testing.T) {
 		t.Error("Error creating new vm", err)
 		return
 	}
-	retrievedVM, err := con.GetVM(newVM.Id)
+	retrievedVM, err := con.GetVM(newVM.ID)
 	if err != nil {
 		t.Error("Error retrieving vm", err)
 		return
@@ -64,8 +64,16 @@ func TestVM(t *testing.T) {
 			return
 		}
 	}
-	retrievedVM.Start("", "", "", "", "", nil)
-	retrievedVM.Stop("false")
+	err = retrievedVM.Start("", "", "", "", "", nil)
+	if err != nil {
+		t.Error("Error starting vm", err)
+		return
+	}
+	err = retrievedVM.Stop("false")
+	if err != nil {
+		t.Error("Error stopping vm", err)
+		return
+	}
 	retrievedVM.Description = "about to delete"
 	err = retrievedVM.Save()
 	if err != nil {

@@ -27,11 +27,11 @@ func (object *VM) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
-	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
 	if err != nil {
 		return err
 	}
-	tempObject := VM{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := VM{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -53,13 +53,13 @@ func (con *Connection) GetAllVMs() ([]*VM, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = con
+		object.Con = con
 	}
 	return objects, err
 }
 
 func (con *Connection) NewVM() *VM {
-	return &VM{OvirtObject: OvirtObject{Api: con}}
+	return &VM{OvirtObject: OvirtObject{Con: con}}
 }
 
 func (object *VM) Save() error {
@@ -69,21 +69,21 @@ func (object *VM) Save() error {
 	}
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
-		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
 		if err != nil {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(VM{}).Name() + "s")
+		link, err := object.Con.GetLink(reflect.TypeOf(VM{}).Name() + "s")
 		if err != nil {
 			return err
 		}
-		body, err = object.Api.Request("POST", link, body)
+		body, err = object.Con.Request("POST", link, body)
 		if err != nil {
 			return err
 		}
 	}
-	tempObject := VM{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := VM{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -109,11 +109,11 @@ func (object *Cluster) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
-	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
 	if err != nil {
 		return err
 	}
-	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := Cluster{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -135,13 +135,13 @@ func (con *Connection) GetAllClusters() ([]*Cluster, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = con
+		object.Con = con
 	}
 	return objects, err
 }
 
 func (con *Connection) NewCluster() *Cluster {
-	return &Cluster{OvirtObject: OvirtObject{Api: con}}
+	return &Cluster{OvirtObject: OvirtObject{Con: con}}
 }
 
 func (object *Cluster) Save() error {
@@ -151,21 +151,21 @@ func (object *Cluster) Save() error {
 	}
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
-		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
 		if err != nil {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(Cluster{}).Name() + "s")
+		link, err := object.Con.GetLink(reflect.TypeOf(Cluster{}).Name() + "s")
 		if err != nil {
 			return err
 		}
-		body, err = object.Api.Request("POST", link, body)
+		body, err = object.Con.Request("POST", link, body)
 		if err != nil {
 			return err
 		}
 	}
-	tempObject := Cluster{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := Cluster{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -191,11 +191,11 @@ func (object *DataCenter) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
-	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
 	if err != nil {
 		return err
 	}
-	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := DataCenter{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -217,13 +217,13 @@ func (con *Connection) GetAllDataCenters() ([]*DataCenter, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = con
+		object.Con = con
 	}
 	return objects, err
 }
 
 func (con *Connection) NewDataCenter() *DataCenter {
-	return &DataCenter{OvirtObject: OvirtObject{Api: con}}
+	return &DataCenter{OvirtObject: OvirtObject{Con: con}}
 }
 
 func (object *DataCenter) Save() error {
@@ -233,21 +233,21 @@ func (object *DataCenter) Save() error {
 	}
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
-		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
 		if err != nil {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(DataCenter{}).Name() + "s")
+		link, err := object.Con.GetLink(reflect.TypeOf(DataCenter{}).Name() + "s")
 		if err != nil {
 			return err
 		}
-		body, err = object.Api.Request("POST", link, body)
+		body, err = object.Con.Request("POST", link, body)
 		if err != nil {
 			return err
 		}
 	}
-	tempObject := DataCenter{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := DataCenter{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -273,11 +273,11 @@ func (object *Template) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
-	body, err := object.Api.Request("GET", object.Api.ResolveLink(object.Href), nil)
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
 	if err != nil {
 		return err
 	}
-	tempObject := Template{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := Template{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err
@@ -299,13 +299,13 @@ func (con *Connection) GetAllTemplates() ([]*Template, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = con
+		object.Con = con
 	}
 	return objects, err
 }
 
 func (con *Connection) NewTemplate() *Template {
-	return &Template{OvirtObject: OvirtObject{Api: con}}
+	return &Template{OvirtObject: OvirtObject{Con: con}}
 }
 
 func (object *Template) Save() error {
@@ -315,21 +315,21 @@ func (object *Template) Save() error {
 	}
 	// If there is a link, it is an already saved object, we need to update it
 	if object.OvirtObject.Href != "" {
-		body, err = object.Api.Request("PUT", object.Api.ResolveLink(object.Href), body)
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
 		if err != nil {
 			return err
 		}
 	} else {
-		link, err := object.Api.GetLink(reflect.TypeOf(Template{}).Name() + "s")
+		link, err := object.Con.GetLink(reflect.TypeOf(Template{}).Name() + "s")
 		if err != nil {
 			return err
 		}
-		body, err = object.Api.Request("POST", link, body)
+		body, err = object.Con.Request("POST", link, body)
 		if err != nil {
 			return err
 		}
 	}
-	tempObject := Template{OvirtObject: OvirtObject{Api: object.Api}}
+	tempObject := Template{OvirtObject: OvirtObject{Con: object.Con}}
 	err = json.Unmarshal(body, &tempObject)
 	if err != nil {
 		return err

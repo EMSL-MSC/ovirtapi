@@ -29,13 +29,13 @@ func TestCluster(t *testing.T) {
 	}
 	newCluster := con.NewCluster()
 	newCluster.Name = "test-cluster"
-	newCluster.Cpu = &ovirtapi.CPU{Type: "Intel Haswell-noTSX Family"}
-	newCluster.DataCenter = &ovirtapi.Link{Id: "00000001-0001-0001-0001-000000000311"}
+	newCluster.CPU = &ovirtapi.CPU{Type: "Intel Haswell-noTSX Family"}
+	newCluster.DataCenter = &ovirtapi.Link{ID: "00000001-0001-0001-0001-000000000311"}
 	err = newCluster.Save()
 	if err != nil {
 		t.Fatal("Error creating new cluster", err)
 	}
-	retrievedCluster, err := con.GetCluster(newCluster.Id)
+	retrievedCluster, err := con.GetCluster(newCluster.ID)
 	if err != nil {
 		t.Fatal("Error retrieving cluster", err)
 	}

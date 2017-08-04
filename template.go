@@ -9,8 +9,8 @@ type Template struct {
 	OvirtObject
 	Comment                    string             `json:"comment,omitempty"`
 	Bios                       *Bios              `json:"bios,omitempty"`
-	Cpu                        *CPU               `json:"cpu,omitempty"`
-	CpuShares                  string             `json:"cpu_shares,omitempty"`
+	CPU                        *CPU               `json:"cpu,omitempty"`
+	CPUShares                  string             `json:"cpu_shares,omitempty"`
 	CreationTime               int                `json:"creation_time,omitempty"`
 	Display                    *Display           `json:"display,omitempty"`
 	HighAvailability           *HighAvailability  `json:"high_availability,omitempty"`
@@ -28,7 +28,7 @@ type Template struct {
 	Type                       string             `json:"type,omitempty"`
 	USB                        *USB               `json:"usb,omitempty"`
 	Cluster                    *Link              `json:"cluster,omitempty"`
-	CpuProfile                 *Link              `json:"cpu_profile,omitempty"`
+	CPUProfile                 *Link              `json:"cpu_profile,omitempty"`
 	Quota                      *Link              `json:"quota,omitempty"`
 	NextRunConfigurationExists string             `json:"next_run_configuration_exists,omitempty"`
 	NumaTuneMode               string             `json:"numa_tune_mode,omitempty"`

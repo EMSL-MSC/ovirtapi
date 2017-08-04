@@ -8,7 +8,7 @@ type Property struct {
 type Cluster struct {
 	OvirtObject
 	BallooningEnabled                string `json:"ballooning_enabled,omitempty"`
-	Cpu                              *CPU   `json:"cpu,omitempty"`
+	CPU                              *CPU   `json:"cpu,omitempty"`
 	CustomSchedulingPolicyProperties *struct {
 		Property []Property `json:"property,omitempty"`
 	} `json:"custom_scheduling_policy_properties,omitempty"`

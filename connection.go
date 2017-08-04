@@ -15,7 +15,7 @@ import (
 type Link struct {
 	Href string `json:"href,omitempty"`
 	Rel  string `json:"rel,omitempty"`
-	Id   string `json:"id,omitempty"`
+	ID   string `json:"id,omitempty"`
 }
 
 type Connection struct {
@@ -31,29 +31,29 @@ type Connection struct {
 		Name    string `json:"name"`
 		Vendor  string `json:"vendor"`
 		Version struct {
-			Major       int    `json:"major"`
-			Minor       int    `json:"minor"`
-			Revision    int    `json:"revision"`
-			Build       int    `json:"build"`
+			Major       string `json:"major"`
+			Minor       string `json:"minor"`
+			Revision    string `json:"revision"`
+			Build       string `json:"build"`
 			FullVersion string `json:"full_version"`
 		} `json:"version"`
 	} `json:"product_info"`
 	Summary struct {
 		Vms struct {
-			Active int `json:"active"`
-			Total  int `json:"total"`
+			Active string `json:"active"`
+			Total  string `json:"total"`
 		} `json:"vms"`
 		Hosts struct {
-			Active int `json:"active"`
-			Total  int `json:"total"`
+			Active string `json:"active"`
+			Total  string `json:"total"`
 		} `json:"hosts"`
 		Users struct {
-			Active int `json:"active"`
-			Total  int `json:"total"`
+			Active string `json:"active"`
+			Total  string `json:"total"`
 		} `json:"users"`
 		StorageDomains struct {
-			Active int `json:"active"`
-			Total  int `json:"total"`
+			Active string `json:"active"`
+			Total  string `json:"total"`
 		} `json:"storage_domains"`
 	} `json:"summary"`
 }
@@ -67,9 +67,8 @@ type RequestError struct {
 func (f RequestError) Error() string {
 	if f.Reason != "" && f.Detail != "" {
 		return fmt.Sprintf("Server Error, Reason: %s, Detail: %s", f.Reason, f.Detail)
-	} else {
-		return fmt.Sprintf("Error getting response from server (Response code %d )", f.StatusCode)
 	}
+	return fmt.Sprintf("Error getting response from server (Response code %d )", f.StatusCode)
 }
 
 func NewConnection(endpoint string, username string, password string) (*Connection, error) {
@@ -86,8 +85,8 @@ func NewConnection(endpoint string, username string, password string) (*Connecti
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal(body, &con)
-	return con, nil
+
+	return con, json.Unmarshal(body, &con)
 }
 
 func (con *Connection) ResolveLink(link string) *url.URL {
