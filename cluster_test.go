@@ -21,13 +21,13 @@ func TestCluster(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	api, err := ovirtapi.NewAPI(url, username, password)
-	api.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password)
+	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
-		t.Error("error creating api connection", err)
+		t.Error("error creating con connection", err)
 		return
 	}
-	newCluster := api.NewCluster()
+	newCluster := con.NewCluster()
 	newCluster.Name = "test-cluster"
 	newCluster.Cpu = &ovirtapi.CPU{Type: "Intel Haswell-noTSX Family"}
 	newCluster.DataCenter = &ovirtapi.Link{Id: "00000001-0001-0001-0001-000000000311"}
@@ -35,7 +35,7 @@ func TestCluster(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error creating new cluster", err)
 	}
-	retrievedCluster, err := api.GetCluster(newCluster.Id)
+	retrievedCluster, err := con.GetCluster(newCluster.Id)
 	if err != nil {
 		t.Fatal("Error retrieving cluster", err)
 	}

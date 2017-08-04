@@ -10,12 +10,12 @@ import (
 	"reflect"
 )
 
-func (api *API) GetVM(id string) (*VM, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", id)
+func (con *Connection) GetVM(id string) (*VM, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewVM()
+	object := con.NewVM()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -40,8 +40,8 @@ func (object *VM) Update() error {
 	return nil
 }
 
-func (api *API) GetAllVMs() ([]*VM, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", "")
+func (con *Connection) GetAllVMs() ([]*VM, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(VM{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
@@ -53,13 +53,13 @@ func (api *API) GetAllVMs() ([]*VM, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = api
+		object.Api = con
 	}
 	return objects, err
 }
 
-func (api *API) NewVM() *VM {
-	return &VM{OvirtObject: OvirtObject{Api: api}}
+func (con *Connection) NewVM() *VM {
+	return &VM{OvirtObject: OvirtObject{Api: con}}
 }
 
 func (object *VM) Save() error {
@@ -92,12 +92,12 @@ func (object *VM) Save() error {
 	return nil
 }
 
-func (api *API) GetCluster(id string) (*Cluster, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", id)
+func (con *Connection) GetCluster(id string) (*Cluster, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewCluster()
+	object := con.NewCluster()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -122,8 +122,8 @@ func (object *Cluster) Update() error {
 	return nil
 }
 
-func (api *API) GetAllClusters() ([]*Cluster, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", "")
+func (con *Connection) GetAllClusters() ([]*Cluster, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
@@ -135,13 +135,13 @@ func (api *API) GetAllClusters() ([]*Cluster, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = api
+		object.Api = con
 	}
 	return objects, err
 }
 
-func (api *API) NewCluster() *Cluster {
-	return &Cluster{OvirtObject: OvirtObject{Api: api}}
+func (con *Connection) NewCluster() *Cluster {
+	return &Cluster{OvirtObject: OvirtObject{Api: con}}
 }
 
 func (object *Cluster) Save() error {
@@ -174,12 +174,12 @@ func (object *Cluster) Save() error {
 	return nil
 }
 
-func (api *API) GetDataCenter(id string) (*DataCenter, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", id)
+func (con *Connection) GetDataCenter(id string) (*DataCenter, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewDataCenter()
+	object := con.NewDataCenter()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -204,8 +204,8 @@ func (object *DataCenter) Update() error {
 	return nil
 }
 
-func (api *API) GetAllDataCenters() ([]*DataCenter, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", "")
+func (con *Connection) GetAllDataCenters() ([]*DataCenter, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(DataCenter{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
@@ -217,13 +217,13 @@ func (api *API) GetAllDataCenters() ([]*DataCenter, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = api
+		object.Api = con
 	}
 	return objects, err
 }
 
-func (api *API) NewDataCenter() *DataCenter {
-	return &DataCenter{OvirtObject: OvirtObject{Api: api}}
+func (con *Connection) NewDataCenter() *DataCenter {
+	return &DataCenter{OvirtObject: OvirtObject{Api: con}}
 }
 
 func (object *DataCenter) Save() error {
@@ -256,12 +256,12 @@ func (object *DataCenter) Save() error {
 	return nil
 }
 
-func (api *API) GetTemplate(id string) (*Template, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", id)
+func (con *Connection) GetTemplate(id string) (*Template, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewTemplate()
+	object := con.NewTemplate()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -286,8 +286,8 @@ func (object *Template) Update() error {
 	return nil
 }
 
-func (api *API) GetAllTemplates() ([]*Template, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", "")
+func (con *Connection) GetAllTemplates() ([]*Template, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(Template{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
@@ -299,13 +299,13 @@ func (api *API) GetAllTemplates() ([]*Template, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = api
+		object.Api = con
 	}
 	return objects, err
 }
 
-func (api *API) NewTemplate() *Template {
-	return &Template{OvirtObject: OvirtObject{Api: api}}
+func (con *Connection) NewTemplate() *Template {
+	return &Template{OvirtObject: OvirtObject{Api: con}}
 }
 
 func (object *Template) Save() error {

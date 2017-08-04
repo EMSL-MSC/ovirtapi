@@ -18,7 +18,7 @@ type Link struct {
 	Id   string `json:"id,omitempty"`
 }
 
-type API struct {
+type Connection struct {
 	EndPoint       *url.URL
 	UserName       string
 	Password       string
@@ -72,29 +72,29 @@ func (f RequestError) Error() string {
 	}
 }
 
-func NewAPI(endpoint string, username string, password string) (*API, error) {
+func NewConnection(endpoint string, username string, password string) (*Connection, error) {
 	endpointURL, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, errors.New("Error parsing endpoint URL")
 	}
-	api := &API{
+	con := &Connection{
 		EndPoint: endpointURL,
 		UserName: username,
 		Password: password,
 	}
-	body, err := api.Request("GET", endpointURL, nil)
+	body, err := con.Request("GET", endpointURL, nil)
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal(body, &api)
-	return api, nil
+	json.Unmarshal(body, &con)
+	return con, nil
 }
 
-func (api *API) ResolveLink(link string) *url.URL {
-	return api.EndPoint.ResolveReference(&url.URL{Path: link})
+func (con *Connection) ResolveLink(link string) *url.URL {
+	return con.EndPoint.ResolveReference(&url.URL{Path: link})
 }
 
-func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byte, error) {
+func (con *Connection) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(verb, requestURL.String(), bytes.NewBuffer(reqBody))
 	if err != nil {
@@ -104,8 +104,8 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 		req.Header.Add("Content-Type", "application/json")
 	}
 	req.Header.Add("Accept", "application/json")
-	req.SetBasicAuth(api.UserName, api.Password)
-	if api.Debug {
+	req.SetBasicAuth(con.UserName, con.Password)
+	if con.Debug {
 		dump, _ := httputil.DumpRequestOut(req, true)
 		fmt.Println(">", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n> ", -1))
 	}
@@ -113,7 +113,7 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 	if err != nil {
 		return nil, err
 	}
-	if api.Debug {
+	if con.Debug {
 		dump, _ := httputil.DumpResponse(resp, true)
 		fmt.Println("<", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n< ", -1))
 	}
@@ -133,25 +133,25 @@ func (api *API) Request(verb string, requestURL *url.URL, reqBody []byte) ([]byt
 	return respBody, nil
 }
 
-func (api *API) GetLink(rel string) (*url.URL, error) {
-	for _, link := range api.Links {
+func (con *Connection) GetLink(rel string) (*url.URL, error) {
+	for _, link := range con.Links {
 		if strings.ToLower(rel) == link.Rel {
-			return api.ResolveLink(link.Href), nil
+			return con.ResolveLink(link.Href), nil
 		}
 	}
-	return nil, fmt.Errorf("api does not have %s link", rel)
+	return nil, fmt.Errorf("con does not have %s link", rel)
 
 }
 
-func (api *API) GetLinkBody(link string, id string) ([]byte, error) {
-	url, err := api.GetLink(link)
+func (con *Connection) GetLinkBody(link string, id string) ([]byte, error) {
+	url, err := con.GetLink(link)
 	if err != nil {
 		return nil, err
 	}
 	if id != "" {
 		url.Path += "/" + id
 	}
-	body, err := api.Request("GET", url, nil)
+	body, err := con.Request("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}

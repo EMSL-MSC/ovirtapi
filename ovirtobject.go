@@ -9,9 +9,9 @@ import (
 
 type OvirtObject struct {
 	Link
-	Api         *API   `json:"-"`
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
+	Api         *Connection `json:"-"`
+	Name        string      `json:"name"`
+	Description string      `json:"description,omitempty"`
 	Actions     struct {
 		Links []Link `json:"link,omitempty"`
 	} `json:"actions,omitempty"`

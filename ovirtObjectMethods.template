@@ -3,18 +3,20 @@ package ovirtapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
-  "github.com/cheekybits/genny/generic"
+
+	"github.com/cheekybits/genny/generic"
 )
 
 type OvirtObjectType generic.Type
 
-func (api *API) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", id)
+func (con *Connection) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", id)
 	if err != nil {
 		return nil, err
 	}
-	object := api.NewOvirtObjectType()
+	object := con.NewOvirtObjectType()
 	err = json.Unmarshal(body, object)
 	if err != nil {
 		return nil, err
@@ -22,7 +24,7 @@ func (api *API) GetOvirtObjectType(id string) (*OvirtObjectType, error) {
 	return object, err
 }
 
-func (object *OvirtObjectType) Update() (error) {
+func (object *OvirtObjectType) Update() error {
 	if object.OvirtObject.Href == "" {
 		return fmt.Errorf("Object has not been saved to the server")
 	}
@@ -39,8 +41,8 @@ func (object *OvirtObjectType) Update() (error) {
 	return nil
 }
 
-func (api *API) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
-	body, err := api.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", "")
+func (con *Connection) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
+	body, err := con.GetLinkBody(reflect.TypeOf(OvirtObjectType{}).Name()+"s", "")
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +54,13 @@ func (api *API) GetAllOvirtObjectTypes() ([]*OvirtObjectType, error) {
 		return nil, err
 	}
 	for _, object := range objects {
-		object.Api = api
+		object.Api = con
 	}
 	return objects, err
 }
 
-func (api *API) NewOvirtObjectType() *OvirtObjectType {
-	return &OvirtObjectType{OvirtObject: OvirtObject{Api: api}}
+func (con *Connection) NewOvirtObjectType() *OvirtObjectType {
+	return &OvirtObjectType{OvirtObject: OvirtObject{Api: con}}
 }
 
 func (object *OvirtObjectType) Save() error {

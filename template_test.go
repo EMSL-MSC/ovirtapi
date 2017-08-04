@@ -22,15 +22,15 @@ func TestTemplate(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	api, err := ovirtapi.NewAPI(url, username, password)
-	api.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password)
+	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
-		t.Error("error creating api connection", err)
+		t.Error("error creating con connection", err)
 		return
 	}
-	newTemplate := api.NewTemplate()
+	newTemplate := con.NewTemplate()
 	newTemplate.Name = "test-Template"
-	allVMs, err := api.GetAllVMs()
+	allVMs, err := con.GetAllVMs()
 	if err != nil {
 		t.Error("Error finding a vm to duplicate")
 		return
@@ -45,7 +45,7 @@ func TestTemplate(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error creating new Template", err)
 	}
-	retrievedTemplate, err := api.GetTemplate(newTemplate.Id)
+	retrievedTemplate, err := con.GetTemplate(newTemplate.Id)
 	if err != nil {
 		t.Fatal("Error retrieving Template", err)
 	}

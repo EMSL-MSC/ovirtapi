@@ -22,13 +22,13 @@ func TestDataCenter(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	api, err := ovirtapi.NewAPI(url, username, password)
-	api.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password)
+	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
-		t.Error("error creating api connection", err)
+		t.Error("error creating con connection", err)
 		return
 	}
-	newDataCenter := api.NewDataCenter()
+	newDataCenter := con.NewDataCenter()
 	newDataCenter.Name = "test-data-center"
 	newDataCenter.Local = "true"
 	err = newDataCenter.Save()
@@ -36,7 +36,7 @@ func TestDataCenter(t *testing.T) {
 		fmt.Printf("%+v\n", err)
 		t.Fatal("Error creating new data center", err)
 	}
-	retrievedDataCenter, err := api.GetDataCenter(newDataCenter.Id)
+	retrievedDataCenter, err := con.GetDataCenter(newDataCenter.Id)
 	if err != nil {
 		t.Fatal("Error retrieving data center", err)
 	}

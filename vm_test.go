@@ -23,24 +23,24 @@ func TestVM(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	api, err := ovirtapi.NewAPI(url, username, password)
-	api.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password)
+	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
-		t.Error("error creating api connection", err)
+		t.Error("error creating con connection", err)
 		return
 	}
-	newVM := api.NewVM()
+	newVM := con.NewVM()
 	newVM.Name = "test-vm"
 	display := ovirtapi.Display{}
 	display.Type = "vnc"
 	newVM.Display = &display
-	allTemplates, err := api.GetAllTemplates()
+	allTemplates, err := con.GetAllTemplates()
 	if err != nil {
 		t.Error("Error finding a Template to assign to a test vm")
 		return
 	}
 	newVM.Template = allTemplates[0]
-	allClusters, err := api.GetAllClusters()
+	allClusters, err := con.GetAllClusters()
 	if err != nil {
 		t.Error("Error finding a Cluster to assign to a test vm")
 		return
@@ -51,7 +51,7 @@ func TestVM(t *testing.T) {
 		t.Error("Error creating new vm", err)
 		return
 	}
-	retrievedVM, err := api.GetVM(newVM.Id)
+	retrievedVM, err := con.GetVM(newVM.Id)
 	if err != nil {
 		t.Error("Error retrieving vm", err)
 		return

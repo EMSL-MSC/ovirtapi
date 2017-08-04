@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestNewAPI(t *testing.T) {
+func TestNewConnection(t *testing.T) {
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")
@@ -19,12 +19,12 @@ func TestNewAPI(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	_, err := ovirtapi.NewAPI(url, username, password)
+	_, err := ovirtapi.NewConnection(url, username, password)
 	if err != nil {
-		t.Fatal("Did not create new API", err)
+		t.Fatal("Did not create new Connection", err)
 		return
 	}
-	_, err = ovirtapi.NewAPI(url, "baduser", "badpass")
+	_, err = ovirtapi.NewConnection(url, "baduser", "badpass")
 	if err == nil {
 		t.Error("Did not fail when passed bad password", err)
 	}
