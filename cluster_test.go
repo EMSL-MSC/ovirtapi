@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/emsl-msc/ovirtapi"
+	"github.com/EMSL-MSC/ovirtapi"
 )
 
 func TestCluster(t *testing.T) {

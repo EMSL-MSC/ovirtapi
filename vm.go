@@ -164,42 +164,38 @@ type VM struct {
 }
 
 // CancelMigration This operation stops any migration of a virtual machine to another physical host.
-func (vm *VM) CancelMigration() (err error) {
-	err = vm.DoAction("cancelmigration", struct{}{})
-	return
+func (vm *VM) CancelMigration() error {
+	return vm.DoAction("cancelmigration", struct{}{})
 }
 
 // Clone Clones to a new VM
-func (vm *VM) Clone(async string, newVM *VM) (err error) {
-	err = vm.DoAction("clone", struct {
+func (vm *VM) Clone(async string, newVM *VM) error {
+	return vm.DoAction("clone", struct {
 		Async string `json:"async,omitempty"`
 		VM    *VM    `json:"vm,omitempty"`
 	}{
 		async,
 		newVM,
 	})
-	return
 }
 
 // CommitSnapshot Permanently restores the virtual machine to the state of the previewed snapshot.
-func (vm *VM) CommitSnapshot(async string) (err error) {
-	err = vm.DoAction("commitsnapshot", struct {
+func (vm *VM) CommitSnapshot(async string) error {
+	return vm.DoAction("commitsnapshot", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // Detach Detaches a virtual machine from a pool.
-func (vm *VM) Detach() (err error) {
-	err = vm.DoAction("detach", struct{}{})
-	return
+func (vm *VM) Detach() error {
+	return vm.DoAction("detach", struct{}{})
 }
 
 // Export Exports a virtual machine to an export domain.
-// func (vm *VM) Export(async string, discardSnapshots, exclusive string, storageDomain *StorageDomain) (err error) {
-// 	err = vm.DoAction("export", struct{
+// func (vm *VM) Export(async string, discardSnapshots, exclusive string, storageDomain *StorageDomain) (error) {
+// 	return vm.DoAction("export", struct{
 // 		Async string `json:"async,omitempty"`
 // 		DiscardSnapshots string `json:"discard_snapshots,omitempty"`
 // 		Exclusive string `json:"exclusive,omitempty"`
@@ -210,44 +206,40 @@ func (vm *VM) Detach() (err error) {
 // 		exclusive,
 // 		storageDomain,
 // 	})
-// 	return
 // }
 
 // FreezeFilesystems Freezes virtual machine file systems.
-func (vm *VM) FreezeFilesystems(async string) (err error) {
-	err = vm.DoAction("freezefilesystems", struct {
+func (vm *VM) FreezeFilesystems(async string) error {
+	return vm.DoAction("freezefilesystems", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // Logon Initiates the automatic user logon to access a virtual machine from an external console.
-func (vm *VM) Logon(async string) (err error) {
-	err = vm.DoAction("logon", struct {
+func (vm *VM) Logon(async string) error {
+	return vm.DoAction("logon", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // Maintenance Sets the global maintenance mode on the hosted engine virtual machine.
-func (vm *VM) Maintenance(async, maintenanceEnabled string) (err error) {
-	err = vm.DoAction("maintenance", struct {
+func (vm *VM) Maintenance(async, maintenanceEnabled string) error {
+	return vm.DoAction("maintenance", struct {
 		Async              string `json:"async,omitempty"`
 		MaintenanceEnabled string `json:"maintenance_enabled,omitempty"`
 	}{
 		async,
 		maintenanceEnabled,
 	})
-	return
 }
 
 // Migrate Migrates a virtual machine to another physical host.
-func (vm *VM) Migrate(async string, cluster *Cluster, force string, host *Link) (err error) {
-	err = vm.DoAction("migrate", struct {
+func (vm *VM) Migrate(async string, cluster *Cluster, force string, host *Link) error {
+	return vm.DoAction("migrate", struct {
 		Async   string   `json:"async,omitempty"`
 		Cluster *Cluster `json:"cluster,omitempty"`
 		Force   string   `json:"force,omitempty"`
@@ -258,42 +250,38 @@ func (vm *VM) Migrate(async string, cluster *Cluster, force string, host *Link) 
 		force,
 		host,
 	})
-	return
 }
 
 // Reboot Sends a reboot request to a virtual machine.
-func (vm *VM) Reboot(async string) (err error) {
-	err = vm.DoAction("reboot", struct {
+func (vm *VM) Reboot(async string) error {
+	return vm.DoAction("reboot", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // ReorderMACAddresses
-func (vm *VM) ReorderMACAddresses(async string) (err error) {
-	err = vm.DoAction("reordermacaddresses", struct {
+func (vm *VM) ReorderMACAddresses(async string) error {
+	return vm.DoAction("reordermacaddresses", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // Shutdown This operation sends a shutdown request to a virtual machine.
-func (vm *VM) Shutdown(async string) (err error) {
-	err = vm.DoAction("shutdown", struct {
+func (vm *VM) Shutdown(async string) error {
+	return vm.DoAction("shutdown", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // Start Starts the virtual machine.
-func (vm *VM) Start(async, filter, pause, useCloudInit, useSysprep string, nextBootVM *VM) (err error) {
-	err = vm.DoAction("start", struct {
+func (vm *VM) Start(async, filter, pause, useCloudInit, useSysprep string, nextBootVM *VM) error {
+	return vm.DoAction("start", struct {
 		Async        string `json:"async,omitempty"`
 		Filter       string `json:"filter,omitempty"`
 		Pause        string `json:"pause,omitempty"`
@@ -308,45 +296,40 @@ func (vm *VM) Start(async, filter, pause, useCloudInit, useSysprep string, nextB
 		useSysprep,
 		nextBootVM,
 	})
-	return
 }
 
 // Stop This operation forces a virtual machine to power-off.
-func (vm *VM) Stop(async string) (err error) {
-	err = vm.DoAction("stop", struct {
+func (vm *VM) Stop(async string) error {
+	return vm.DoAction("stop", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
-// Suspend This operation saves the virtual machine state to disk and stops it.
-func (vm *VM) Suspend(async string) (err error) {
-	err = vm.DoAction("suspend", struct {
+//Suspend This operation saves the virtual machine state to disk and stops it.
+func (vm *VM) Suspend(async string) error {
+	return vm.DoAction("suspend", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // ThawFilesystems Thaws virtual machine file systems.
-func (vm *VM) ThawFilesystems(async string) (err error) {
-	err = vm.DoAction("thawfilesystems", struct {
+func (vm *VM) ThawFilesystems(async string) error {
+	return vm.DoAction("thawfilesystems", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }
 
 // UndoSnapshot Restores the virtual machine to the state it had before previewing the snapshot.
-func (vm *VM) UndoSnapshot(async string) (err error) {
-	err = vm.DoAction("undosnapshot", struct {
+func (vm *VM) UndoSnapshot(async string) error {
+	return vm.DoAction("undosnapshot", struct {
 		Async string `json:"async,omitempty"`
 	}{
 		async,
 	})
-	return
 }

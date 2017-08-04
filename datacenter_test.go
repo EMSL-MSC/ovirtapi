@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/emsl-msc/ovirtapi"
+	"github.com/EMSL-MSC/ovirtapi"
 )
 
 func TestDataCenter(t *testing.T) {

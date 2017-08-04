@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/emsl-msc/ovirtapi"
+	"github.com/EMSL-MSC/ovirtapi"
 )
 
 func TestVM(t *testing.T) {

@@ -1,7 +1,7 @@
 package ovirtapi_test
 
 import (
-	"github.com/emsl-msc/ovirtapi"
+	"github.com/EMSL-MSC/ovirtapi"
 	"os"
 	"testing"
 )

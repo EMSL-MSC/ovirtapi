@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/emsl-msc/ovirtapi"
+	"github.com/EMSL-MSC/ovirtapi"
 )
 
 func TestTemplate(t *testing.T) {
