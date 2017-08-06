@@ -1,5 +1,10 @@
 package ovirtapi
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // Bios ...
 type Bios struct {
 	BootMenu struct {
@@ -242,7 +247,7 @@ type Initialization struct {
 	Domain            string             `json:"domain,omitempty"`
 	HostName          string             `json:"HostName,omitempty"`
 	InputLocale       string             `json:"input_locale,omitempty"`
-	NICConfigurations []NICConfiguration `json:"nic_configurations,omitempty"`
+	NICConfigurations []NICConfiguration `json:"nic_configurations>nic_configuration,omitempty"`
 	OrgName           string             `json:"org_name,omitempty"`
 	RegenerateIDs     string             `json:"regenerate_ids,omitempty"`
 	RegenerateSSHKeys string             `json:"regenerate_ssh_keys,omitempty"`
@@ -302,20 +307,20 @@ type Kernel struct {
 
 // Boot Configuration of the boot sequence of a virtual machine.
 type Boot struct {
-	Devices []string `json:"devices,omitempty"`
+	Devices []string `json:"devices>device,omitempty"`
 }
 
 // Version ...
 type Version struct {
-	Build       int    `json:"build,omitempty"`
+	Build       string    `json:"build,omitempty"`
 	Comment     string `json:"comment,omitempty"`
 	Description string `json:"description,omitempty"`
 	FullVersion string `json:"full_version,omitempty"`
 	ID          string `json:"id,omitempty"`
-	Major       int    `json:"major,omitempty"`
-	Minor       int    `json:"minor,omitempty"`
+	Major       string `json:"major,omitempty"`
+	Minor       string `json:"minor,omitempty"`
 	Name        string `json:"name,omitempty"`
-	Revision    int    `json:"revision,omitempty"`
+	Revision    string `json:"revision,omitempty"`
 }
 
 // TimeZone Time zone representation.
@@ -555,3 +560,92 @@ func (vm *VM) UndoSnapshot(async string) error {
 		async,
 	})
 }
+
+
+// GetVM retrieve a VM from the server
+func (con *Connection) GetVM(id string) (*VM, error) {
+	body, err := con.GetLinkBody("vms", id)
+	if err != nil {
+		return nil, err
+	}
+	object := con.NewVM()
+	err = json.Unmarshal(body, object)
+	if err != nil {
+		return nil, err
+	}
+	return object, err
+}
+
+// Update Synchronize the local VM with a copy from the server
+func (object *VM) Update() error {
+	if object.Href == "" {
+		return fmt.Errorf("VM has not been saved to the server")
+	}
+	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
+	if err != nil {
+		return err
+	}
+	tempObject := VM{OvirtObject: OvirtObject{Con: object.Con}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
+}
+
+// GetAllVMs Retrieve all the VMs from the server
+func (con *Connection) GetAllVMs() ([]*VM, error) {
+	body, err := con.GetLinkBody("vms", "")
+	if err != nil {
+		return nil, err
+	}
+	objects := []*VM{}
+	err = json.Unmarshal(body, &struct {
+		VM *[]*VM
+	}{&objects})
+	if err != nil {
+		return nil, err
+	}
+	for _, object := range objects {
+		object.Con = con
+	}
+	return objects, err
+}
+
+// NewVM Create a new VM structure
+func (con *Connection) NewVM() *VM {
+	return &VM{OvirtObject: OvirtObject{Con: con}}
+}
+
+// Save Updates the server with the local copy of the VM
+func (object *VM) Save() error {
+	body, err := json.MarshalIndent(object, "", "    ")
+	if err != nil {
+		return err
+	}
+	// If there is a link, it is an already saved object, we need to update it
+	if object.OvirtObject.Href != "" {
+		body, err = object.Con.Request("PUT", object.Con.ResolveLink(object.Href), body)
+		if err != nil {
+			return err
+		}
+	} else {
+		link, err := object.Con.GetLink("vms")
+		if err != nil {
+			return err
+		}
+		body, err = object.Con.Request("POST", link, body)
+		if err != nil {
+			return err
+		}
+	}
+	tempObject := VM{OvirtObject: OvirtObject{Con: object.Con}}
+	err = json.Unmarshal(body, &tempObject)
+	if err != nil {
+		return err
+	}
+	*object = tempObject
+	return nil
+}
+
