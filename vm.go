@@ -577,20 +577,15 @@ func (con *Connection) GetVM(id string) (*VM, error) {
 }
 
 // Update Synchronize the local VM with a copy from the server
-func (object *VM) Update() error {
-	if object.Href == "" {
+func (vm *VM) Update() error {
+	if vm.Href == "" {
 		return fmt.Errorf("VM has not been saved to the server")
 	}
-	body, err := object.Con.Request("GET", object.Con.ResolveLink(object.Href), nil)
+	newVM, err := vm.Con.GetVM(vm.ID)
 	if err != nil {
 		return err
 	}
-	tempObject := VM{OvirtObject: OvirtObject{Con: object.Con}}
-	err = json.Unmarshal(body, &tempObject)
-	if err != nil {
-		return err
-	}
-	*object = tempObject
+	*vm = *newVM
 	return nil
 }
 
