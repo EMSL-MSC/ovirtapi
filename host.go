@@ -456,7 +456,7 @@ func (con *Connection) GetHost(id string) (*Host, error) {
 	return host, err
 }
 
-// Update Synchronize the local object with a copy from the server
+// Update Synchronize the local Host with a copy from the server
 func (host *Host) Update() error {
 	if host.Href == "" {
 		return fmt.Errorf("host has not been saved to the server")

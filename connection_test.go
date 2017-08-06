@@ -7,6 +7,7 @@ import (
 )
 
 func TestNewConnection(t *testing.T) {
+	t.Parallel()
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")

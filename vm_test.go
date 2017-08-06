@@ -11,17 +11,21 @@ import (
 )
 
 func TestVM(t *testing.T) {
+	t.Parallel()
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")
+		return
 	}
 	password := os.Getenv("OVIRT_PASSWORD")
 	if password == "" {
 		t.Error("OVIRT_PASSWORD is not set")
+		return
 	}
 	url := os.Getenv("OVIRT_URL")
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
+		return
 	}
 	con, err := ovirtapi.NewConnection(url, username, password)
 	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
@@ -36,13 +40,13 @@ func TestVM(t *testing.T) {
 	newVM.Display = &display
 	allTemplates, err := con.GetAllTemplates()
 	if err != nil {
-		t.Error("Error finding a Template to assign to a test vm")
+		t.Error("Error finding a Template to assign to a test vm", err)
 		return
 	}
 	newVM.Template = allTemplates[0]
 	allClusters, err := con.GetAllClusters()
 	if err != nil {
-		t.Error("Error finding a Cluster to assign to a test vm")
+		t.Error("Error finding a Cluster to assign to a test vm", err)
 		return
 	}
 	newVM.Cluster = allClusters[0]

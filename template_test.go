@@ -10,6 +10,7 @@ import (
 )
 
 func TestTemplate(t *testing.T) {
+	t.Parallel()
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")
@@ -32,7 +33,7 @@ func TestTemplate(t *testing.T) {
 	newTemplate.Name = "test-Template"
 	allVMs, err := con.GetAllVMs()
 	if err != nil {
-		t.Error("Error finding a vm to duplicate")
+		t.Error("Error finding a vm to duplicate", err)
 		return
 	}
 	for _, vm := range allVMs {
