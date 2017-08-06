@@ -1,40 +1,49 @@
 package ovirtapi
 
+// Bios ...
 type Bios struct {
 	BootMenu struct {
 		Enabled string `json:"enabled"`
 	} `json:"boot_menu"`
 }
 
+// Console Representation for serial console device.
 type Console struct {
 	Enabled string `json:"enabled,omitempty"`
 }
 
+// Core ...
 type Core struct {
 	Index  int `json:"index,omitempty"`
 	Socket int `json:"socket,omitempty"`
 }
 
+// CustomProperty Custom property representation.
 type CustomProperty struct {
 	Name   int `json:"name,omitempty"`
 	Regexp int `json:"regexp,omitempty"`
 	Value  int `json:"value,omitempty"`
 }
 
+// VCPUPin ...
 type VCPUPin struct {
 	CPUSet string `json:"cpu_set,omitempty"`
 	VCPU   int    `json:"vcpu,omitempty"`
 }
 
+// CPUTune ...
 type CPUTune struct {
 	VCPUPins []VCPUPin `json:"vcpu_pins,omitempty"`
 }
+
+// CPUTopology ...
 type CPUTopology struct {
 	Cores   string `json:"cores,omitempty"`
 	Sockets string `json:"sockets,omitempty"`
 	Threads string `json:"threads,omitempty"`
 }
 
+// CPU ...
 type CPU struct {
 	Architecture string       `json:"architecture,omitempty"`
 	Cores        []Core       `json:"cores,omitempty"`
@@ -47,6 +56,7 @@ type CPU struct {
 	Type         string       `json:"type,omitempty"`
 }
 
+// Certificate ...
 type Certificate struct {
 	Comment      string `json:"comment,omitempty"`
 	Content      string `json:"content,omitempty"`
@@ -57,6 +67,7 @@ type Certificate struct {
 	Subject      string `json:"subject,omitempty"`
 }
 
+// Display Represents a graphic console configuration.
 type Display struct {
 	// The IP address of the guest to connect the graphic console client to.
 	Address string `json:"address,omitempty"`
@@ -88,6 +99,7 @@ type Display struct {
 	Type string `json:"type,omitempty"`
 }
 
+// GuestOperatingSystem Represents an operating system installed on the virtual machine.
 type GuestOperatingSystem struct {
 	// The architecture of the operating system, such as x86_64.
 	Architecture string `json:"architecture,omitempty"`
@@ -103,16 +115,19 @@ type GuestOperatingSystem struct {
 	Version *Version `json:"version,omitempty"`
 }
 
+// HighAvailability Type representing high availability of a virtual machine.
 type HighAvailability struct {
 	Enabled  string `json:"enabled,omitempty"`
 	Priority string `json:"priority,omitempty"`
 }
 
+// Configuration ...
 type Configuration struct {
 	Data string `json:"data,omitempty"`
 	Type string `json:"type,omitempty"`
 }
 
+// DNS Represents the DNS resolver configuration.
 type DNS struct {
 	// Array of hosts serving as search domains.
 	SearchDomains []Host `json:"search_domains,omitempty"`
@@ -120,11 +135,13 @@ type DNS struct {
 	Servers []Host `json:"servers,omitempty"`
 }
 
+// MAC Represents a MAC address of a virtual network interface.
 type MAC struct {
 	// MAC Address
 	Address string `json:"address,omitempty"`
 }
 
+// NIC Represents a virtual machine NIC.
 type NIC struct {
 	// Defines how an IP address is assigned to the NIC.
 	BootProtocol string `json:"boot_protocol,omitempty"`
@@ -148,11 +165,13 @@ type NIC struct {
 	Plugged string `json:"plugged,omitempty"`
 }
 
+// NetworkConfiguration ...
 type NetworkConfiguration struct {
 	DNS  DNS   `json:"dns,omitempty"`
 	NICs []NIC `json:"nics,omitempty"`
 }
 
+// AuthorizedKey ...
 type AuthorizedKey struct {
 	// Free text containing comments about this object.
 	Comment string `json:"comment,omitempty"`
@@ -165,16 +184,18 @@ type AuthorizedKey struct {
 	Name string `json:"name,omitempty"`
 }
 
+// CloudInit ...
 type CloudInit struct {
 	AuthorizedKeys       []AuthorizedKey       `json:"authorized_keys,omitempty"`
 	Files                []File                `json:"files,omitempty"`
 	Host                 *Host                 `json:"host,omitempty"`
 	NetworkConfiguration *NetworkConfiguration `json:"network_configuration,omitempty"`
-	RegenerateSshKeys    string                `json:"regenerate_ssh_keys,omitempty"`
+	RegenerateSSHKeys    string                `json:"regenerate_ssh_keys,omitempty"`
 	Timezone             string                `json:"timezone,omitempty"`
 	Users                []User                `json:"users,omitempty"`
 }
 
+// File ...
 type File struct {
 	// Free text containing comments about this object.
 	Comment string `json:"comment,omitempty"`
@@ -188,6 +209,7 @@ type File struct {
 	Type string `json:"type,omitempty"`
 }
 
+// IP Represents the IP configuration of a network interface.
 type IP struct {
 	// The text representation of the IP address.
 	Address string `json:"address,omitempty"`
@@ -199,6 +221,7 @@ type IP struct {
 	Version string `json:"version,omitempty"`
 }
 
+// NICConfiguration ...
 type NICConfiguration struct {
 	BootProtocol string `json:"boot_protocol,omitempty"`
 	IP           *IP    `json:"ip,omitempty"`
@@ -206,6 +229,7 @@ type NICConfiguration struct {
 	OnBoot       string `json:"on_boot,omitempty"`
 }
 
+// Initialization ...
 type Initialization struct {
 	ActiveDirectoryOU string `json:"active_directory_ou,omitempty"`
 	AuthorizedSSHKeys string `json:"authorized_ssh_keys,omitempty"`
@@ -231,21 +255,35 @@ type Initialization struct {
 	WindowsLicenseKey string             `json:"windows_license_key,omitempty"`
 }
 
+// IO ...
 type IO struct {
 	Threads string `json:"threads,omitempty"`
 }
 
+// MemoryPolicy Logical grouping of memory related properties of virtual machine-like entities.
 type MemoryPolicy struct {
 	Ballooning string `json:"ballooning,omitempty"`
 	Guaranteed int    `json:"guaranteed,omitempty"`
 	Max        int    `json:"max,omitempty"`
 }
 
-type Migration struct {
-	AutoConverge string `json:"auto_converge,omitempty"`
-	Compressed   string `json:"compressed,omitempty"`
+// MigrationBandwidth Defines the bandwidth used by migration.
+type MigrationBandwidth struct {
+	// The method used to assign the bandwidth.
+	AssignmentMethod string `json:"auto_converge,omitempty"`
+	// Custom bandwidth in Mbps. Will be applied only if the assignmentMethod attribute is custom.
+	CustomValue int `json:"custom_value,omitempty"`
 }
 
+// MigrationOptions The type for migration options.
+type MigrationOptions struct {
+	AutoConverge string `json:"auto_converge,omitempty"`
+	// The bandwidth that is allowed to be used by the migration.
+	Bandwidth  *MigrationBandwidth `json:"bandwidth,omitempty"`
+	Compressed string              `json:"compressed,omitempty"`
+}
+
+// OperatingSystem Information describing the operating system. This is used for both virtual machines and hosts.
 type OperatingSystem struct {
 	Boot                  *Boot    `json:"boot,omitempty"`
 	Cmdline               string   `json:"cmdline,omitempty"`
@@ -257,14 +295,17 @@ type OperatingSystem struct {
 	Version               *Version `json:"version,omitempty"`
 }
 
+// Kernel ...
 type Kernel struct {
 	Version *Version `json:"version,omitempty"`
 }
 
+// Boot Configuration of the boot sequence of a virtual machine.
 type Boot struct {
-	Devices []string `json:"devices>device,omitempty"`
+	Devices []string `json:"devices,omitempty"`
 }
 
+// Version ...
 type Version struct {
 	Build       int    `json:"build,omitempty"`
 	Comment     string `json:"comment,omitempty"`
@@ -277,22 +318,25 @@ type Version struct {
 	Revision    int    `json:"revision,omitempty"`
 }
 
+// TimeZone Time zone representation.
 type TimeZone struct {
 	Name      string `json:"name,omitempty"`
 	UTCOffset string `json:"utc_offset,omitempty"`
 }
 
+// USB Configuration of the USB device of a virtual machine.
 type USB struct {
 	Enabled string `json:"enabled,omitempty"`
 	Type    string `json:"type,omitempty"`
 }
 
+// VMPlacementPolicy
 type VMPlacementPolicy struct {
 	Affinity string `json:"affinity,omitempty"`
-	//Host
+	Hosts    []Host `json:"hosts,omitempty"`
 }
 
-// Represents a virtual machine.
+// VM Represents a virtual machine.
 type VM struct {
 	OvirtObject
 	Comment                    string                `json:"comment,omitempty"`
@@ -315,7 +359,7 @@ type VM struct {
 	LargeIcon                  *Link                 `json:"large_icon,omitempty"`
 	Memory                     int                   `json:"memory,omitempty"`
 	MemoryPolicy               *MemoryPolicy         `json:"memory_policy,omitempty"`
-	Migration                  *Migration            `json:"migration,omitempty"`
+	Migration                  *MigrationOptions     `json:"migration,omitempty"`
 	MigrationDowntime          string                `json:"migration_downtime,omitempty"`
 	Origin                     string                `json:"origin,omitempty"`
 	Os                         *OperatingSystem      `json:"os,omitempty"`
@@ -371,13 +415,13 @@ func (vm *VM) Detach() error {
 	return vm.DoAction("detach", struct{}{})
 }
 
-// Export Exports a virtual machine to an export domain.
-// func (vm *VM) Export(async string, discardSnapshots, exclusive string, storageDomain *StorageDomain) (error) {
-// 	return vm.DoAction("export", struct{
-// 		Async string `json:"async,omitempty"`
-// 		DiscardSnapshots string `json:"discard_snapshots,omitempty"`
-// 		Exclusive string `json:"exclusive,omitempty"`
-// 		StorageDomain *StorageDomain `json:"storage_domain,omitempty"`
+// // Export Exports a virtual machine to an export domain.
+// func (vm *VM) Export(async, discardSnapshots, exclusive string, storageDomain *StorageDomain) error {
+// 	return vm.DoAction("export", struct {
+// 		Async            string         `json:"async,omitempty"`
+// 		DiscardSnapshots string         `json:"discard_snapshots,omitempty"`
+// 		Exclusive        string         `json:"exclusive,omitempty"`
+// 		StorageDomain    *StorageDomain `json:"storage_domain,omitempty"`
 // 	}{
 // 		async,
 // 		discardSnapshots,

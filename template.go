@@ -17,7 +17,7 @@ type Template struct {
 	LargeIcon                  *Link              `json:"large_icon,omitempty"`
 	Memory                     int                `json:"memory,omitempty"`
 	MemoryPolicy               *MemoryPolicy      `json:"memory_policy,omitempty"`
-	Migration                  *Migration         `json:"migration,omitempty"`
+	Migration                  *MigrationOptions  `json:"migration,omitempty"`
 	MigrationDowntime          string             `json:"migration_downtime,omitempty"`
 	Origin                     string             `json:"origin,omitempty"`
 	Os                         *OperatingSystem   `json:"os,omitempty"`
