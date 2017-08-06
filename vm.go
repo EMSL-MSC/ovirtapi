@@ -6,9 +6,19 @@ type Bios struct {
 	} `json:"boot_menu"`
 }
 
+type Console struct {
+	Enabled string `json:"enabled,omitempty"`
+}
+
 type Core struct {
 	Index  int `json:"index,omitempty"`
 	Socket int `json:"socket,omitempty"`
+}
+
+type CustomProperty struct {
+	Name   int `json:"name,omitempty"`
+	Regexp int `json:"regexp,omitempty"`
+	Value  int `json:"value,omitempty"`
 }
 
 type VCPUPin struct {
@@ -48,22 +58,177 @@ type Certificate struct {
 }
 
 type Display struct {
-	Address             string       `json:"address,omitempty"`
-	AllowOverride       string       `json:"allow_override,omitempty"`
-	Certificate         *Certificate `json:"certificate,omitempty"`
-	CopyPasteEnabled    string       `json:"copy_paste_enabled,omitempty"`
-	DisconnectAction    string       `json:"disconnect_action,omitempty"`
-	FileTransferEnabled string       `json:"file_transfer_enabled,omitempty"`
-	Monitors            string       `json:"monitors,omitempty"`
-	SecurePort          string       `json:"secure_port,omitempty"`
-	SingleQxlPci        string       `json:"single_qxl_pci,omitempty"`
-	SmartcardEnabled    string       `json:"smartcard_enabled,omitempty"`
-	Type                string       `json:"type,omitempty"`
+	// The IP address of the guest to connect the graphic console client to.
+	Address string `json:"address,omitempty"`
+	// Indicates if to override the display address per host.
+	AllowOverride string `json:"allow_override,omitempty"`
+	// The TLS certificate in case of a TLS connection.
+	Certificate *Certificate `json:"certificate,omitempty"`
+	// Indicates whether a user is able to copy and paste content from an external host into the graphic console.
+	CopyPasteEnabled string `json:"copy_paste_enabled,omitempty"`
+	// Returns the action that will take place when the graphic console is disconnected.
+	DisconnectAction string `json:"disconnect_action,omitempty"`
+	// Indicates if a user is able to drag and drop files from an external host into the graphic console.
+	FileTransferEnabled string `json:"file_transfer_enabled,omitempty"`
+	// The keyboard layout to use with this graphic console.
+	KeyboardLayout string `json:"keyboard_layout,omitempty"`
+	// The number of monitors opened for this graphic console.
+	Monitors string `json:"monitors,omitempty"`
+	// The port address on the guest to connect the graphic console client to.
+	Port string `json:"port,omitempty"`
+	// The proxy IP which will be used by the graphic console client to connect to the guest.
+	Proxy string `json:"proxy,omitempty"`
+	// The secured port address on the guest, in case of using TLS, to connect the graphic console client to.
+	SecurePort string `json:"secure_port,omitempty"`
+	// Indicates if to use one PCI slot for each monitor or to use a single PCI channel for all multiple monitors.
+	SingleQxlPci string `json:"single_qxl_pci,omitempty"`
+	// Indicates if to use smart card authentication.
+	SmartcardEnabled string `json:"smartcard_enabled,omitempty"`
+	// The graphic console protocol type.
+	Type string `json:"type,omitempty"`
+}
+
+type GuestOperatingSystem struct {
+	// The architecture of the operating system, such as x86_64.
+	Architecture string `json:"architecture,omitempty"`
+	// Code name of the operating system, such as Maipo.
+	Codename string `json:"codename,omitempty"`
+	// Full name of operating system distribution.
+	Distribution string `json:"distribution,omitempty"`
+	// Family of operating system, such as Linux.
+	Family string `json:"family,omitempty"`
+	// Kernel version of the operating system.
+	Kernel *Kernel `json:"kernel,omitempty"`
+	// Version of the installed operating system.
+	Version *Version `json:"version,omitempty"`
 }
 
 type HighAvailability struct {
 	Enabled  string `json:"enabled,omitempty"`
 	Priority string `json:"priority,omitempty"`
+}
+
+type Configuration struct {
+	Data string `json:"data,omitempty"`
+	Type string `json:"type,omitempty"`
+}
+
+type DNS struct {
+	// Array of hosts serving as search domains.
+	SearchDomains []Host `json:"search_domains,omitempty"`
+	// Array of hosts serving as DNS servers.
+	Servers []Host `json:"servers,omitempty"`
+}
+
+type MAC struct {
+	// MAC Address
+	Address string `json:"address,omitempty"`
+}
+
+type NIC struct {
+	// Defines how an IP address is assigned to the NIC.
+	BootProtocol string `json:"boot_protocol,omitempty"`
+	// Free text containing comments about this object.
+	Comment string `json:"comment,omitempty"`
+	// A human-readable description in plain text.
+	Description string `json:"description,omitempty"`
+	// A unique identifier.
+	ID string `json:"id,omitempty"`
+	// The type of driver used for the NIC.
+	Interface string `json:"interface,omitempty"`
+	// Defines if the NIC is linked to the virtual machine.
+	Linked string `json:"linked,omitempty"`
+	// The MAC address of the interface.
+	MAC *MAC `json:"mac,omitempty"`
+	// A human-readable name in plain text.
+	Name string `json:"name,omitempty"`
+	// Defines if the network interface should be activated upon operation system startup.
+	OnBoot string `json:"on_boot,omitempty"`
+	// Defines if the NIC is plugged in to the virtual machine.
+	Plugged string `json:"plugged,omitempty"`
+}
+
+type NetworkConfiguration struct {
+	DNS  DNS   `json:"dns,omitempty"`
+	NICs []NIC `json:"nics,omitempty"`
+}
+
+type AuthorizedKey struct {
+	// Free text containing comments about this object.
+	Comment string `json:"comment,omitempty"`
+	// A human-readable description in plain text.
+	Description string `json:"description,omitempty"`
+	// A unique identifier.
+	ID  string `json:"id,omitempty"`
+	Key string `json:"key,omitempty"`
+	// A human-readable name in plain text.
+	Name string `json:"name,omitempty"`
+}
+
+type CloudInit struct {
+	AuthorizedKeys       []AuthorizedKey       `json:"authorized_keys,omitempty"`
+	Files                []File                `json:"files,omitempty"`
+	Host                 *Host                 `json:"host,omitempty"`
+	NetworkConfiguration *NetworkConfiguration `json:"network_configuration,omitempty"`
+	RegenerateSshKeys    string                `json:"regenerate_ssh_keys,omitempty"`
+	Timezone             string                `json:"timezone,omitempty"`
+	Users                []User                `json:"users,omitempty"`
+}
+
+type File struct {
+	// Free text containing comments about this object.
+	Comment string `json:"comment,omitempty"`
+	Content string `json:"content,omitempty"`
+	// A human-readable description in plain text.
+	Description string `json:"description,omitempty"`
+	// A unique identifier.
+	ID string `json:"id,omitempty"`
+	// A human-readable name in plain text.
+	Name string `json:"name,omitempty"`
+	Type string `json:"type,omitempty"`
+}
+
+type IP struct {
+	// The text representation of the IP address.
+	Address string `json:"address,omitempty"`
+	// The address of the default gateway.
+	Gateway string `json:"gateway,omitempty"`
+	// The network mask.
+	Netmask string `json:"netmask,omitempty"`
+	// The version of the IP protocol.
+	Version string `json:"version,omitempty"`
+}
+
+type NICConfiguration struct {
+	BootProtocol string `json:"boot_protocol,omitempty"`
+	IP           *IP    `json:"ip,omitempty"`
+	Name         string `json:"name,omitempty"`
+	OnBoot       string `json:"on_boot,omitempty"`
+}
+
+type Initialization struct {
+	ActiveDirectoryOU string `json:"active_directory_ou,omitempty"`
+	AuthorizedSSHKeys string `json:"authorized_ssh_keys,omitempty"`
+	//TODO Finish structures from here
+	CloudInit         *CloudInit         `json:"cloud_init,omitempty"`
+	Configuration     *Configuration     `json:"configuration,omitempty"`
+	CustomScript      string             `json:"custom_script,omitempty"`
+	DNSSearch         string             `json:"dns_search,omitempty"`
+	DNSServers        string             `json:"dns_servers,omitempty"`
+	Domain            string             `json:"domain,omitempty"`
+	HostName          string             `json:"HostName,omitempty"`
+	InputLocale       string             `json:"input_locale,omitempty"`
+	NICConfigurations []NICConfiguration `json:"nic_configurations,omitempty"`
+	OrgName           string             `json:"org_name,omitempty"`
+	RegenerateIDs     string             `json:"regenerate_ids,omitempty"`
+	RegenerateSSHKeys string             `json:"regenerate_ssh_keys,omitempty"`
+	RootPassword      string             `json:"root_password,omitempty"`
+	SystemLocale      string             `json:"system_locale,omitempty"`
+	Timezone          string             `json:"timezone,omitempty"`
+	UILanguage        string             `json:"ui_language,omitempty"`
+	UserLocale        string             `json:"user_locale,omitempty"`
+	UserName          string             `json:"user_name,omitempty"`
+	WindowsLicenseKey string             `json:"windows_license_key,omitempty"`
 }
 
 type IO struct {
@@ -90,6 +255,10 @@ type OperatingSystem struct {
 	ReportedKernelCmdline string   `json:"reported_kernel_cmdline,omitempty"`
 	Type                  string   `json:"type,omitempty"`
 	Version               *Version `json:"version,omitempty"`
+}
+
+type Kernel struct {
+	Version *Version `json:"version,omitempty"`
 }
 
 type Boot struct {
@@ -126,41 +295,50 @@ type VMPlacementPolicy struct {
 // Represents a virtual machine.
 type VM struct {
 	OvirtObject
-	Comment                    string             `json:"comment,omitempty"`
-	Bios                       *Bios              `json:"bios,omitempty"`
-	CPU                        *CPU               `json:"cpu,omitempty"`
-	CPUShares                  string             `json:"cpu_shares,omitempty"`
-	CreationTime               int                `json:"creation_time,omitempty"`
-	Display                    *Display           `json:"display,omitempty"`
-	HighAvailability           *HighAvailability  `json:"high_availability,omitempty"`
-	Io                         *IO                `json:"io,omitempty"`
-	LargeIcon                  *Link              `json:"large_icon,omitempty"`
-	Memory                     int                `json:"memory,omitempty"`
-	MemoryPolicy               *MemoryPolicy      `json:"memory_policy,omitempty"`
-	Migration                  *Migration         `json:"migration,omitempty"`
-	MigrationDowntime          string             `json:"migration_downtime,omitempty"`
-	Origin                     string             `json:"origin,omitempty"`
-	Os                         *OperatingSystem   `json:"os,omitempty"`
-	SmallIcon                  *Link              `json:"small_icon,omitempty"`
-	StartPaused                string             `json:"start_paused,omitempty"`
-	Stateless                  string             `json:"stateless,omitempty"`
-	TimeZone                   *TimeZone          `json:"time_zone,omitempty"`
-	Type                       string             `json:"type,omitempty"`
-	USB                        *USB               `json:"usb,omitempty"`
-	Cluster                    *Cluster           `json:"cluster,omitempty"`
-	CPUProfile                 *Link              `json:"cpu_profile,omitempty"`
-	Quota                      *Link              `json:"quota,omitempty"`
-	NextRunConfigurationExists string             `json:"next_run_configuration_exists,omitempty"`
-	NumaTuneMode               string             `json:"numa_tune_mode,omitempty"`
-	PlacementPolicy            *VMPlacementPolicy `json:"placement_policy,omitempty"`
-	Runonce                    string             `json:"run_once,omitempty"`
-	Starttime                  int                `json:"start_time,omitempty"`
-	StopTime                   int                `json:"stop_time,omitempty"`
-	Status                     string             `json:"status,omitempty"`
-	Host                       *Link              `json:"host,omitempty"`
-	InstanceType               *Link              `json:"instance_type,omitempty"`
-	OriginalTemplate           *Link              `json:"original_template,omitempty"`
-	Template                   *Template          `json:"template,omitempty"`
+	Comment                    string                `json:"comment,omitempty"`
+	Console                    *Console              `json:"console,omitempty"`
+	Bios                       *Bios                 `json:"bios,omitempty"`
+	CPU                        *CPU                  `json:"cpu,omitempty"`
+	CPUShares                  string                `json:"cpu_shares,omitempty"`
+	CreationTime               int                   `json:"creation_time,omitempty"`
+	CustomCompatibilityVersion *Version              `json:"custom_compatibility_version,omitempty"`
+	CustomCPUModel             string                `json:"custom_cpu_model,omitempty"`
+	CustomEmulatedMachine      string                `json:"custom_emulated_machine,omitempty"`
+	CustomProperties           []CustomProperty      `json:"custom_properties,omitempty"`
+	DeleteProtected            string                `json:"delete_protected,omitempty"`
+	Display                    *Display              `json:"display,omitempty"`
+	FQDN                       string                `json:"fqdn,omitempty"`
+	GuestOperatingSystem       *GuestOperatingSystem `json:"guest_operating_system,omitempty"`
+	HighAvailability           *HighAvailability     `json:"high_availability,omitempty"`
+	Initialization             *Initialization       `json:"initialization,omitempty"`
+	Io                         *IO                   `json:"io,omitempty"`
+	LargeIcon                  *Link                 `json:"large_icon,omitempty"`
+	Memory                     int                   `json:"memory,omitempty"`
+	MemoryPolicy               *MemoryPolicy         `json:"memory_policy,omitempty"`
+	Migration                  *Migration            `json:"migration,omitempty"`
+	MigrationDowntime          string                `json:"migration_downtime,omitempty"`
+	Origin                     string                `json:"origin,omitempty"`
+	Os                         *OperatingSystem      `json:"os,omitempty"`
+	SmallIcon                  *Link                 `json:"small_icon,omitempty"`
+	StartPaused                string                `json:"start_paused,omitempty"`
+	Stateless                  string                `json:"stateless,omitempty"`
+	TimeZone                   *TimeZone             `json:"time_zone,omitempty"`
+	Type                       string                `json:"type,omitempty"`
+	USB                        *USB                  `json:"usb,omitempty"`
+	Cluster                    *Cluster              `json:"cluster,omitempty"`
+	CPUProfile                 *Link                 `json:"cpu_profile,omitempty"`
+	Quota                      *Link                 `json:"quota,omitempty"`
+	NextRunConfigurationExists string                `json:"next_run_configuration_exists,omitempty"`
+	NumaTuneMode               string                `json:"numa_tune_mode,omitempty"`
+	PlacementPolicy            *VMPlacementPolicy    `json:"placement_policy,omitempty"`
+	Runonce                    string                `json:"run_once,omitempty"`
+	Starttime                  int                   `json:"start_time,omitempty"`
+	StopTime                   int                   `json:"stop_time,omitempty"`
+	Status                     string                `json:"status,omitempty"`
+	Host                       *Link                 `json:"host,omitempty"`
+	InstanceType               *Link                 `json:"instance_type,omitempty"`
+	OriginalTemplate           *Link                 `json:"original_template,omitempty"`
+	Template                   *Template             `json:"template,omitempty"`
 }
 
 // CancelMigration This operation stops any migration of a virtual machine to another physical host.
