@@ -27,10 +27,10 @@ func TestVM(t *testing.T) {
 		t.Error("OVIRT_URL is not set")
 		return
 	}
-	con, err := ovirtapi.NewConnection(url, username, password)
-	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	debug, _ := strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password, debug)
 	if err != nil {
-		t.Error("error creating con connection", err)
+		t.Error("error creating connection", err)
 		return
 	}
 	newVM := con.NewVM()

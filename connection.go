@@ -71,7 +71,7 @@ func (f RequestError) Error() string {
 	return fmt.Sprintf("Error getting response from server (Response code %d )", f.StatusCode)
 }
 
-func NewConnection(endpoint string, username string, password string) (*Connection, error) {
+func NewConnection(endpoint string, username string, password string, debug bool) (*Connection, error) {
 	endpointURL, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, errors.New("Error parsing endpoint URL")
@@ -80,6 +80,7 @@ func NewConnection(endpoint string, username string, password string) (*Connecti
 		EndPoint: endpointURL,
 		UserName: username,
 		Password: password,
+		Debug: debug,
 	}
 	body, err := con.Request("GET", endpointURL, nil)
 	if err != nil {

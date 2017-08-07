@@ -22,10 +22,10 @@ func TestCluster(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	con, err := ovirtapi.NewConnection(url, username, password)
-	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	debug, _ := strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
+	con, err := ovirtapi.NewConnection(url, username, password, debug)
 	if err != nil {
-		t.Error("error creating con connection", err)
+		t.Error("error creating connection", err)
 		return
 	}
 	newCluster := con.NewCluster()

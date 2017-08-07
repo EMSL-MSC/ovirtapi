@@ -23,10 +23,10 @@ func TestHost(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	con, err := ovirtapi.NewConnection(url, username, password)
+	con, err := ovirtapi.NewConnection(url, username, password, false)
 	con.Debug, _ = strconv.ParseBool(os.Getenv("DEBUG_TRANSPORT"))
 	if err != nil {
-		t.Error("error creating con connection", err)
+		t.Error("error creating connection", err)
 		return
 	}
 	newHost := con.NewHost()

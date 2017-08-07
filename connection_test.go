@@ -20,12 +20,12 @@ func TestNewConnection(t *testing.T) {
 	if url == "" {
 		t.Error("OVIRT_URL is not set")
 	}
-	_, err := ovirtapi.NewConnection(url, username, password)
+	_, err := ovirtapi.NewConnection(url, username, password, false)
 	if err != nil {
 		t.Fatal("Did not create new Connection", err)
 		return
 	}
-	_, err = ovirtapi.NewConnection(url, "baduser", "badpass")
+	_, err = ovirtapi.NewConnection(url, "baduser", "badpass", false)
 	if err == nil {
 		t.Error("Did not fail when passed bad password", err)
 	}
