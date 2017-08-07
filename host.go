@@ -13,11 +13,11 @@ type TransparentHugePages struct {
 // VMSummary Type containing information related to virtual machines on a particular host.
 type VMSummary struct {
 	// The number of virtual machines active on the host.
-	Active int `json:"active,omitempty"`
+	Active int `json:"active,omitempty,string"`
 	// The number of virtual machines migrating to or from the host.
-	Migrating int `json:"migrating,omitempty"`
+	Migrating int `json:"migrating,omitempty,string"`
 	// The number of virtual machines present on the host.
-	Total int `json:"total,omitempty"`
+	Total int `json:"total,omitempty,string"`
 }
 
 // User Represents a user in the system.
@@ -50,17 +50,17 @@ type SSH struct {
 	Comment string `json:"comment,omitempty"`
 	// A human-readable description in plain text.
 	Description string `json:"description,omitempty"`
-	Fingerprint string `json:"fingerprint,omitempty"`
+	Fingerprint string `json:"fingerprint,omitempty,string"`
 	// A unique identifier.
 	ID string `json:"id,omitempty"`
 	// A human-readable name in plain text.
 	Name string `json:"name,omitempty"`
-	Port int    `json:"port,omitempty"`
+	Port int    `json:"port,omitempty,string"`
 	User User   `json:"user,omitempty"`
 }
 
 type SPM struct {
-	Priority int    `json:"priority,omitempty"`
+	Priority int    `json:"priority,omitempty,string"`
 	Status   string `json:"status,omitempty"`
 }
 
@@ -98,11 +98,11 @@ type Agent struct {
 	// Fence agent options (comma-delimited list of key-value pairs).
 	Options []Option `json:"options,omitempty"`
 	// The order of this agent if used with other agents.
-	Order int `json:"order,omitempty"`
+	Order int `json:"order,omitempty,string"`
 	// Fence agent password.
 	Password string `json:"password,omitempty"`
 	// Fence agent port.
-	Port int `json:"port,omitempty"`
+	Port int `json:"port,omitempty,string"`
 	// Fence agent type.
 	Type string `json:"type,omitempty"`
 	// Fence agent user name.
@@ -147,14 +147,14 @@ type ISCSIDetails struct {
 	Address         string `json:"address,omitempty"`
 	DiskID          string `json:"disk_id,omitempty"`
 	Initiator       string `json:"initiator,omitempty"`
-	LunMapping      int    `json:"lun_mapping,omitempty"`
+	LunMapping      int    `json:"lun_mapping,omitempty,string"`
 	Password        string `json:"password,omitempty"`
-	Paths           int    `json:"paths,omitempty"`
-	Port            int    `json:"port,omitempty"`
+	Paths           int    `json:"paths,omitempty,string"`
+	Port            int    `json:"port,omitempty,string"`
 	Portal          string `json:"portal,omitempty"`
 	ProductID       string `json:"product_id,omitempty"`
 	Serial          string `json:"serial,omitempty"`
-	Size            int    `json:"size,omitempty"`
+	Size            int    `json:"size,omitempty,string"`
 	Status          string `json:"status,omitempty"`
 	StorageDomainID string `json:"storage_domain_id,omitempty"`
 	Target          string `json:"target,omitempty"`
@@ -168,7 +168,7 @@ type HostedEngine struct {
 	Configured        string `json:"configured,omitempty"`
 	GlobalMaintenance string `json:"global_maintenance,omitempty"`
 	LocalMaintenance  string `json:"local_maintenance,omitempty"`
-	Score             int    `json:"score,omitempty"`
+	Score             int    `json:"score,omitempty,string"`
 }
 
 // HardwareInformation Represents hardware information of host.
@@ -225,9 +225,9 @@ type Host struct {
 	// The host libvirt version.
 	LibvirtVersion *Version `json:"libvirt_version,omitempty"`
 	// The max scheduling memory on this host in bytes.
-	MaxSchedulingMemory int `json:"max_scheduling_memory,omitempty"`
+	MaxSchedulingMemory int `json:"max_scheduling_memory,omitempty,string"`
 	// The amount of physical memory on this host in bytes.
-	Memory int `json:"memory,omitempty"`
+	Memory int `json:"memory,omitempty,string"`
 	// A human-readable name in plain text.
 	Name string `json:"name,omitempty"`
 	// Specifies whether non uniform memory access (NUMA) is supported on this host.
@@ -237,7 +237,7 @@ type Host struct {
 	// Specifies whether we should override firewall definitions.
 	OverrideIptables string `json:"override_iptables,omitempty"`
 	// The host port.
-	Port int `json:"port,omitempty"`
+	Port int `json:"port,omitempty,string"`
 	// The host power management definitions.
 	PowerManagement *PowerManagement `json:"power_management,omitempty"`
 	// The protocol that the engine uses to communicate with the host.
@@ -396,7 +396,7 @@ func (host *Host) Refresh(async string) error {
 // 	return host.DoAction("refresh", struct {
 // 		Async                          string               `json:"asyncomitempty"`
 // 		CheckConnectivity              string               `json:"asyncomitempty"`
-// 		ConnectivityTimeout            int                  `json:"connectivity_timeoutomitempty"`
+// 		ConnectivityTimeout            int                  `json:"connectivity_timeout,omitempty,string"`
 // 		ModifiedBonds                  []HostNic            `json:"modified_bondsomitempty"`
 // 		ModifiedLabels                 []NetworkLabels      `json:"modified_labelsomitempty"`
 // 		ModifiedNetworkAttachments     []NetworkAttachments `json:"modified_attachmentsomitempty"`

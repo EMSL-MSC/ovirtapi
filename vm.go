@@ -19,8 +19,8 @@ type Console struct {
 
 // Core ...
 type Core struct {
-	Index  int `json:"index,omitempty"`
-	Socket int `json:"socket,omitempty"`
+	Index  int `json:"index,omitempty,string"`
+	Socket int `json:"socket,omitempty,string"`
 }
 
 // CustomProperty Custom property representation.
@@ -33,7 +33,7 @@ type CustomProperty struct {
 // VCPUPin ...
 type VCPUPin struct {
 	CPUSet string `json:"cpu_set,omitempty"`
-	VCPU   int    `json:"vcpu,omitempty"`
+	VCPU   int    `json:"vcpu,omitempty,string"`
 }
 
 // CPUTune ...
@@ -43,9 +43,9 @@ type CPUTune struct {
 
 // CPUTopology ...
 type CPUTopology struct {
-	Cores   string `json:"cores,omitempty"`
-	Sockets string `json:"sockets,omitempty"`
-	Threads string `json:"threads,omitempty"`
+	Cores   int `json:"cores,omitempty,string"`
+	Sockets int `json:"sockets,omitempty,string"`
+	Threads int `json:"threads,omitempty,string"`
 }
 
 // CPU ...
@@ -56,7 +56,7 @@ type CPU struct {
 	Level        int          `json:"level,omitempty"`
 	CPUMode      string       `json:"cpu_mode,omitempty"`
 	Name         string       `json:"name,omitempty"`
-	Speed        string       `json:"speed,omitempty"`
+	Speed        int          `json:"speed,omitempty,string"`
 	Topology     *CPUTopology `json:"topology,omitempty"`
 	Type         string       `json:"type,omitempty"`
 }
@@ -89,13 +89,13 @@ type Display struct {
 	// The keyboard layout to use with this graphic console.
 	KeyboardLayout string `json:"keyboard_layout,omitempty"`
 	// The number of monitors opened for this graphic console.
-	Monitors string `json:"monitors,omitempty"`
+	Monitors int `json:"monitors,omitempty,string"`
 	// The port address on the guest to connect the graphic console client to.
-	Port string `json:"port,omitempty"`
+	Port int `json:"port,omitempty,string"`
 	// The proxy IP which will be used by the graphic console client to connect to the guest.
 	Proxy string `json:"proxy,omitempty"`
 	// The secured port address on the guest, in case of using TLS, to connect the graphic console client to.
-	SecurePort string `json:"secure_port,omitempty"`
+	SecurePort int `json:"secure_port,omitempty,string"`
 	// Indicates if to use one PCI slot for each monitor or to use a single PCI channel for all multiple monitors.
 	SingleQxlPci string `json:"single_qxl_pci,omitempty"`
 	// Indicates if to use smart card authentication.
@@ -123,7 +123,7 @@ type GuestOperatingSystem struct {
 // HighAvailability Type representing high availability of a virtual machine.
 type HighAvailability struct {
 	Enabled  string `json:"enabled,omitempty"`
-	Priority string `json:"priority,omitempty"`
+	Priority int    `json:"priority,omitempty,string"`
 }
 
 // Configuration ...
@@ -262,14 +262,21 @@ type Initialization struct {
 
 // IO ...
 type IO struct {
-	Threads string `json:"threads,omitempty"`
+	Threads int `json:"threads,omitempty,string"`
+}
+
+// MemoryOverCommit ...
+type MemoryOverCommit struct {
+	Percent int `json:"percent,omitempty,string"`
 }
 
 // MemoryPolicy Logical grouping of memory related properties of virtual machine-like entities.
 type MemoryPolicy struct {
-	Ballooning string `json:"ballooning,omitempty"`
-	Guaranteed int    `json:"guaranteed,omitempty"`
-	Max        int    `json:"max,omitempty"`
+	Ballooning           string                `json:"ballooning,omitempty"`
+	Guaranteed           int                   `json:"guaranteed,omitempty"`
+	Max                  int                   `json:"max,omitempty"`
+	OverCommit           *MemoryOverCommit     `json:"over_commit,omitempty"`
+	TransparentHugePages *TransparentHugePages `json:"transparent_huge_pages,omitempty"`
 }
 
 // MigrationBandwidth Defines the bandwidth used by migration.
@@ -277,7 +284,7 @@ type MigrationBandwidth struct {
 	// The method used to assign the bandwidth.
 	AssignmentMethod string `json:"auto_converge,omitempty"`
 	// Custom bandwidth in Mbps. Will be applied only if the assignmentMethod attribute is custom.
-	CustomValue int `json:"custom_value,omitempty"`
+	CustomValue int `json:"custom_value,omitempty,string"`
 }
 
 // MigrationOptions The type for migration options.
@@ -312,15 +319,15 @@ type Boot struct {
 
 // Version ...
 type Version struct {
-	Build       string    `json:"build,omitempty"`
+	Build       int    `json:"build,omitempty,string"`
 	Comment     string `json:"comment,omitempty"`
 	Description string `json:"description,omitempty"`
 	FullVersion string `json:"full_version,omitempty"`
 	ID          string `json:"id,omitempty"`
-	Major       string `json:"major,omitempty"`
-	Minor       string `json:"minor,omitempty"`
+	Major       int    `json:"major,omitempty,string"`
+	Minor       int    `json:"minor,omitempty,string"`
 	Name        string `json:"name,omitempty"`
-	Revision    string `json:"revision,omitempty"`
+	Revision    int    `json:"revision,omitempty,string"`
 }
 
 // TimeZone Time zone representation.
@@ -335,7 +342,7 @@ type USB struct {
 	Type    string `json:"type,omitempty"`
 }
 
-// VMPlacementPolicy
+// VMPlacementPolicy ...
 type VMPlacementPolicy struct {
 	Affinity string `json:"affinity,omitempty"`
 	Hosts    []Host `json:"hosts,omitempty"`
@@ -348,7 +355,7 @@ type VM struct {
 	Console                    *Console              `json:"console,omitempty"`
 	Bios                       *Bios                 `json:"bios,omitempty"`
 	CPU                        *CPU                  `json:"cpu,omitempty"`
-	CPUShares                  string                `json:"cpu_shares,omitempty"`
+	CPUShares                  int                   `json:"cpu_shares,omitempty,string"`
 	CreationTime               int                   `json:"creation_time,omitempty"`
 	CustomCompatibilityVersion *Version              `json:"custom_compatibility_version,omitempty"`
 	CustomCPUModel             string                `json:"custom_cpu_model,omitempty"`
@@ -365,7 +372,7 @@ type VM struct {
 	Memory                     int                   `json:"memory,omitempty"`
 	MemoryPolicy               *MemoryPolicy         `json:"memory_policy,omitempty"`
 	Migration                  *MigrationOptions     `json:"migration,omitempty"`
-	MigrationDowntime          string                `json:"migration_downtime,omitempty"`
+	MigrationDowntime          int                   `json:"migration_downtime,omitempty,string"`
 	Origin                     string                `json:"origin,omitempty"`
 	Os                         *OperatingSystem      `json:"os,omitempty"`
 	SmallIcon                  *Link                 `json:"small_icon,omitempty"`
@@ -561,7 +568,6 @@ func (vm *VM) UndoSnapshot(async string) error {
 	})
 }
 
-
 // GetVM retrieve a VM from the server
 func (con *Connection) GetVM(id string) (*VM, error) {
 	body, err := con.GetLinkBody("vms", id)
@@ -643,4 +649,3 @@ func (object *VM) Save() error {
 	*object = tempObject
 	return nil
 }
-

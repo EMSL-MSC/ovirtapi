@@ -40,20 +40,20 @@ type Connection struct {
 	} `json:"product_info"`
 	Summary struct {
 		Vms struct {
-			Active string `json:"active"`
-			Total  string `json:"total"`
+			Active int `json:"active,string"`
+			Total  int `json:"total,string"`
 		} `json:"vms"`
 		Hosts struct {
-			Active string `json:"active"`
-			Total  string `json:"total"`
+			Active int `json:"active,string"`
+			Total  int `json:"total,string"`
 		} `json:"hosts"`
 		Users struct {
-			Active string `json:"active"`
-			Total  string `json:"total"`
+			Active int `json:"active,string"`
+			Total  int `json:"total,string"`
 		} `json:"users"`
 		StorageDomains struct {
-			Active string `json:"active"`
-			Total  string `json:"total"`
+			Active int `json:"active,string"`
+			Total  int `json:"total,string"`
 		} `json:"storage_domains"`
 	} `json:"summary"`
 }
