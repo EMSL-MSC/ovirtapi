@@ -1,7 +1,6 @@
 package ovirtapi_test
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"testing"
@@ -10,7 +9,6 @@ import (
 )
 
 func TestHost(t *testing.T) {
-	t.Skip()
 	username := os.Getenv("OVIRT_USERNAME")
 	if username == "" {
 		t.Error("OVIRT_USERNAME is not set")
@@ -29,26 +27,19 @@ func TestHost(t *testing.T) {
 		t.Error("error creating connection", err)
 		return
 	}
-	newHost := con.NewHost()
-	newHost.Name = "test-host"
-	newHost.Address = "test-host"
-	newHost.RootPassword = "test-pass"
-	err = newHost.Save()
-	if err != nil {
-		fmt.Printf("%+v\n", err)
-		t.Fatal("Error creating new host", err)
-	}
-	retrievedHost, err := con.GetHost(newHost.ID)
+	retrievedHosts, err := con.GetAllHosts()
 	if err != nil {
 		t.Fatal("Error retrieving host", err)
 	}
-	retrievedHost.Description = "about to delete"
-	err = retrievedHost.Save()
+	savedComment := retrievedHosts[0].Comment
+	retrievedHosts[0].Comment = "testing Description change"
+	err = retrievedHosts[0].Save()
 	if err != nil {
 		t.Fatal("Error updating host", err)
 	}
-	err = retrievedHost.Delete()
+	retrievedHosts[0].Comment = savedComment
+	err = retrievedHosts[0].Save()
 	if err != nil {
-		t.Fatal("Error Deleting host", err)
+		t.Fatal("Error reverting description on host", err)
 	}
 }

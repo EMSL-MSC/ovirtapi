@@ -56,7 +56,7 @@ type CPU struct {
 	Level        int          `json:"level,omitempty"`
 	CPUMode      string       `json:"cpu_mode,omitempty"`
 	Name         string       `json:"name,omitempty"`
-	Speed        int          `json:"speed,omitempty,string"`
+	Speed        int          `json:"speed,omitempty"`
 	Topology     *CPUTopology `json:"topology,omitempty"`
 	Type         string       `json:"type,omitempty"`
 }

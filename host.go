@@ -50,7 +50,7 @@ type SSH struct {
 	Comment string `json:"comment,omitempty"`
 	// A human-readable description in plain text.
 	Description string `json:"description,omitempty"`
-	Fingerprint string `json:"fingerprint,omitempty,string"`
+	Fingerprint string `json:"fingerprint,omitempty"`
 	// A unique identifier.
 	ID string `json:"id,omitempty"`
 	// A human-readable name in plain text.
@@ -73,6 +73,7 @@ type PMProxy struct {
 	Type string `json:"type,omitempty"`
 }
 
+// Option ...
 type Option struct {
 	Name  string `json:"name,omitempty"`
 	Type  string `json:"type,omitempty"`
@@ -109,6 +110,7 @@ type Agent struct {
 	Username string `json:"username,omitempty"`
 }
 
+// PowerManagement ...
 type PowerManagement struct {
 	// The host name or IP address of the host.
 	Address string `json:"address,omitempty"`
@@ -125,7 +127,7 @@ type PowerManagement struct {
 	// A valid, robust password for power management.
 	Password string `json:"password,omitempty"`
 	// Determines the power management proxy.
-	PMProxies []PMProxy `json:"pm_proxies,omitempty"`
+	PMProxies PMProxy `json:"pm_proxies,omitempty"`
 	// Determines the power status of the host.
 	Status string `json:"status,omitempty"`
 	// Fencing device code.
@@ -134,15 +136,18 @@ type PowerManagement struct {
 	Username string `json:"username,omitempty"`
 }
 
+// KSM ...
 type KSM struct {
 	Enabled          string `json:"enabled,omitempty"`
 	MergeAcrossNodes string `json:"merge_across_nodes,omitempty"`
 }
 
+// HostDevicePassthrough ...
 type HostDevicePassthrough struct {
 	Enabled string `json:"enabled,omitempty"`
 }
 
+// ISCSIDetails ...
 type ISCSIDetails struct {
 	Address         string `json:"address,omitempty"`
 	DiskID          string `json:"disk_id,omitempty"`
@@ -163,6 +168,7 @@ type ISCSIDetails struct {
 	VolumeGroupID   string `json:"volume_group_id,omitempty"`
 }
 
+// HostedEngine ...
 type HostedEngine struct {
 	Active            string `json:"active,omitempty"`
 	Configured        string `json:"configured,omitempty"`
@@ -182,9 +188,9 @@ type HardwareInformation struct {
 	// Unique ID for host's chassis.
 	SerialNumber string `json:"serial_number,omitempty"`
 	// Supported sources of random number generator.
-	SupportedRngSources []string `json:"supported_rng_sources,omitempty"`
+	SupportedRngSources []string `json:"supported_rng_sources>supported_rng_source,omitempty"`
 	// Unique ID for each host.
-	Uuid string `json:"uuid,omitempty"`
+	UUID string `json:"uuid,omitempty"`
 	// Unique name for each of the manufacturer.
 	Version string `json:"version,omitempty"`
 }
@@ -195,17 +201,17 @@ type Host struct {
 	// The host address (FQDN/IP).
 	Address string `json:"address,omitempty"`
 	// The host auto non uniform memory access (NUMA) status.
-	Auto_numa_status string `json:"auto_numa_status,omitempty"`
+	AutoNumaStatus string `json:"auto_numa_status,omitempty"`
 	// The host certificate.
 	Certificate *Certificate `json:"certificate,omitempty"`
 	// Free text containing comments about this object.
 	Comment string `json:"comment,omitempty"`
 	// The CPU type of this host.
-	Cpu *CPU `json:"cpu,omitempty"`
+	CPU *CPU `json:"cpu,omitempty"`
 	// A human-readable description in plain text.
 	Description string `json:"description,omitempty"`
 	// Specifies whether host device passthrough is enabled on this host.
-	Device_passthrough *HostDevicePassthrough `json:"device_passthrough,omitempty"`
+	DevicePassthrough *HostDevicePassthrough `json:"device_passthrough,omitempty"`
 	// Optionally specify the display address of this host explicitly.
 	Display *Display `json:"display,omitempty"`
 	// The host external status.
@@ -213,7 +219,7 @@ type Host struct {
 	// The host hardware information.
 	HardwareInformation *HardwareInformation `json:"hardware_information,omitempty"`
 	// The self-hosted engine status of this host.
-	Hosted_engine *HostedEngine `json:"hosted_engine,omitempty"`
+	HostedEngine *HostedEngine `json:"hosted_engine,omitempty"`
 	// A unique identifier.
 	ID string `json:"id,omitempty"`
 	// The host iSCSI details.
@@ -225,9 +231,9 @@ type Host struct {
 	// The host libvirt version.
 	LibvirtVersion *Version `json:"libvirt_version,omitempty"`
 	// The max scheduling memory on this host in bytes.
-	MaxSchedulingMemory int `json:"max_scheduling_memory,omitempty,string"`
+	MaxSchedulingMemory int `json:"max_scheduling_memory,omitempty"`
 	// The amount of physical memory on this host in bytes.
-	Memory int `json:"memory,omitempty,string"`
+	Memory int `json:"memory,omitempty"`
 	// A human-readable name in plain text.
 	Name string `json:"name,omitempty"`
 	// Specifies whether non uniform memory access (NUMA) is supported on this host.
@@ -418,6 +424,7 @@ func (host *Host) Refresh(async string) error {
 // 	})
 // }
 
+// UnregisteredStorageDomainsDiscover ...
 func (host *Host) UnregisteredStorageDomainsDiscover(async string, iscsi *ISCSIDetails) error {
 	return host.DoAction("unregisteredstoragedomainsdiscover", struct {
 		Async string        `json:"async,omitempty"`
@@ -437,7 +444,7 @@ func (host *Host) Upgrade(async string) error {
 	})
 }
 
-// Upgradecheck Check if there are upgrades available for the host. If there are upgrades available an icon will be displayed next to host status icon in the webadmin. Audit log messages are also added to indicate the availability of upgrades. The upgrade can be started from the webadmin or by using the upgrade host action.
+// UpgradeCheck Check if there are upgrades available for the host. If there are upgrades available an icon will be displayed next to host status icon in the webadmin. Audit log messages are also added to indicate the availability of upgrades. The upgrade can be started from the webadmin or by using the upgrade host action.
 func (host *Host) UpgradeCheck() error {
 	return host.DoAction("upgradecheck", struct{}{})
 }
