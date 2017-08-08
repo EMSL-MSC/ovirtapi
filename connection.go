@@ -2,6 +2,7 @@ package ovirtapi
 
 import (
 	"bytes"
+	"log"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -107,7 +108,7 @@ func (con *Connection) Request(verb string, requestURL *url.URL, reqBody []byte)
 	req.SetBasicAuth(con.UserName, con.Password)
 	if con.Debug {
 		dump, _ := httputil.DumpRequestOut(req, true)
-		fmt.Println(">", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n> ", -1))
+		log.Println(">", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n> ", -1))
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -115,7 +116,7 @@ func (con *Connection) Request(verb string, requestURL *url.URL, reqBody []byte)
 	}
 	if con.Debug {
 		dump, _ := httputil.DumpResponse(resp, true)
-		fmt.Println("<", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n< ", -1))
+		log.Println("<", strings.Replace(strings.Replace(string(dump), "\r\n", "\n", -1), "\n", "\n< ", -1))
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {

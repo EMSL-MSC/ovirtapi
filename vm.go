@@ -234,6 +234,10 @@ type NICConfiguration struct {
 	OnBoot       string `json:"on_boot,omitempty"`
 }
 
+type NICConfigurations struct {
+	NICConfiguration []NICConfiguration `json:"nic_configuration,omitempty"`
+}
+
 // Initialization ...
 type Initialization struct {
 	ActiveDirectoryOU string `json:"active_directory_ou,omitempty"`
@@ -247,7 +251,7 @@ type Initialization struct {
 	Domain            string             `json:"domain,omitempty"`
 	HostName          string             `json:"HostName,omitempty"`
 	InputLocale       string             `json:"input_locale,omitempty"`
-	NICConfigurations []NICConfiguration `json:"nic_configurations>nic_configuration,omitempty"`
+	NICConfigurations *NICConfigurations `json:"nic_configurations,omitempty"`
 	OrgName           string             `json:"org_name,omitempty"`
 	RegenerateIDs     string             `json:"regenerate_ids,omitempty"`
 	RegenerateSSHKeys string             `json:"regenerate_ssh_keys,omitempty"`
