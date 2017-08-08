@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"reflect"
 )
+
 func (con *Connection) GetCluster(id string) (*Cluster, error) {
 	body, err := con.GetLinkBody(reflect.TypeOf(Cluster{}).Name()+"s", id)
 	if err != nil {

@@ -286,7 +286,7 @@ type MemoryPolicy struct {
 // MigrationBandwidth Defines the bandwidth used by migration.
 type MigrationBandwidth struct {
 	// The method used to assign the bandwidth.
-	AssignmentMethod string `json:"auto_converge,omitempty"`
+	AssignmentMethod string `json:"assignment_method,omitempty"`
 	// Custom bandwidth in Mbps. Will be applied only if the assignmentMethod attribute is custom.
 	CustomValue int `json:"custom_value,omitempty,string"`
 }

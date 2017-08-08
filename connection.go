@@ -2,11 +2,11 @@ package ovirtapi
 
 import (
 	"bytes"
-	"log"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -59,13 +59,13 @@ type Connection struct {
 	} `json:"summary"`
 }
 
-type RequestError struct {
+type Fault struct {
 	StatusCode int
 	Detail     string `json:"detail"`
 	Reason     string `json:"reason"`
 }
 
-func (f RequestError) Error() string {
+func (f Fault) Error() string {
 	if f.Reason != "" && f.Detail != "" {
 		return fmt.Sprintf("Server Error, Reason: %s, Detail: %s", f.Reason, f.Detail)
 	}
@@ -81,7 +81,7 @@ func NewConnection(endpoint string, username string, password string, debug bool
 		EndPoint: endpointURL,
 		UserName: username,
 		Password: password,
-		Debug: debug,
+		Debug:    debug,
 	}
 	body, err := con.Request("GET", endpointURL, nil)
 	if err != nil {
@@ -120,10 +120,13 @@ func (con *Connection) Request(verb string, requestURL *url.URL, reqBody []byte)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fault := RequestError{resp.StatusCode, "", ""}
+		fault := Fault{resp.StatusCode, "", ""}
 		respBody, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
 			json.Unmarshal(respBody, &fault)
+			if fault.Reason == "" {
+				json.Unmarshal(respBody, &Action{Fault: &fault})
+			}
 		}
 		return nil, fault
 	}
