@@ -13,12 +13,6 @@ import (
 	"strings"
 )
 
-type Link struct {
-	Href string `json:"href,omitempty"`
-	Rel  string `json:"rel,omitempty"`
-	ID   string `json:"id,omitempty"`
-}
-
 type Connection struct {
 	EndPoint       *url.URL
 	UserName       string
