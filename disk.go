@@ -66,7 +66,7 @@ type HostStorage struct {
 
 type StorageDomains struct {
 	//TODO make StorageDomain
-	StorageDomain []Link	`json:"storage_domain,omitempty"`
+	StorageDomain []Link `json:"storage_domain,omitempty"`
 }
 
 type Disk struct {
@@ -109,20 +109,20 @@ type Disk struct {
 	// Indicates if the disk's blocks will be read back as zeros after it is deleted:
 	//
 	// - On block storage, the disk will be zeroed and only then deleted.
-	WipeAfterDelete string      `json:"wipe_after_delete,omitempty"`
+	WipeAfterDelete string `json:"wipe_after_delete,omitempty"`
 	// TODO Make DiskProfile
-	DiskProfile     *Link `json:"disk_profile,omitempty"`
+	DiskProfile *Link `json:"disk_profile,omitempty"`
 	// Optionally references to an instance type the device is used by.
 	// TODO Make InstanceType
-	InstanceType        *Link        `json:"instance_type,omitempty"`
+	InstanceType *Link `json:"instance_type,omitempty"`
 	// TODO Make OpenStackVolumeType
 	OpenstackVolumeType *Link `json:"openstack_volume_type,omitempty"`
 	// TODO Make Permission
-	Permissions         []Link        `json:"permissions,omitempty"`
+	Permissions []Link `json:"permissions,omitempty"`
 	// TODO Make Quota
-	Quota               *Link               `json:"quota,omitempty"`
+	Quota *Link `json:"quota,omitempty"`
 	// TODO Make Snapshot
-	Snapshot            *Link            `json:"snapshot,omitempty"`
+	Snapshot *Link `json:"snapshot,omitempty"`
 	// Statistics exposed by the disk.
 	// TODO Make Statistic
 	Statistics []Link `json:"statistics,omitempty"`
@@ -211,4 +211,38 @@ func (disk *Disk) Save() error {
 	}
 	*disk = tempDisk
 	return nil
+}
+
+// Copy This operation copies a disk to the specified storage domain.
+func (vm *VM) Copy(async string, disk *Disk, filter string, storageDomain *StorageDomain) error {
+	return vm.DoAction("copy", Action{
+		Async:         aync,
+		Disk:          disk,
+		Filter:        filter,
+		StorageDomain: StorageDomain,
+	})
+}
+
+func (vm *VM) Export(async, filter string, storageDomain *StorageDomain) error {
+	return vm.DoAction("export", Action{
+		Async:         aync,
+		Disk:          disk,
+		Filter:        filter,
+		StorageDomain: StorageDomain,
+	})
+}
+
+// Move a disk to another storage domain.
+func (vm *VM) Move(async, filter string, storageDomain *StorageDomain) error {
+	return vm.DoAction("move", Action{
+		Async:         aync,
+		Disk:          disk,
+		Filter:        filter,
+		StorageDomain: StorageDomain,
+	})
+}
+
+// Sparsify the disk.
+func (vm *VM) Sparsify() error {
+	return vm.DoAction("move", Action{})
 }

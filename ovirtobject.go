@@ -42,7 +42,7 @@ type Action struct {
 	Description string `json:"description,omitempty"`
 	// TODO: Details          GlusterVolumeProfileDetails `json:"details,omitempty"`
 	DiscardSnapshots string `json:"discard_snapshots,omitempty"`
-	// TODO: Disk             Disk                        `json:"disk,omitempty"`
+	Disk             *Disk  `json:"disk,omitempty"`
 	// TODO: Disks            []Disk                      `json:"disks,omitempty"`
 	Exclusive string `json:"exclusive,omitempty"`
 	Fault     *Fault `json:"fault,omitempty"`
@@ -81,10 +81,10 @@ type Action struct {
 	RestoreMemory  string `json:"restore_memory,omitempty"`
 	RootPassword   string `json:"root_password,omitempty"`
 	// TODO: Snapshot                       Snapshot                             `json:"snapshot,omitempty"`
-	SSH                *SSH   `json:"ssh,omitempty"`
-	Status             string `json:"status,omitempty"`
-	StopGlusterService string `json:"stop_gluster_service,omitempty"`
-	// TODO: StorageDomain                  StorageDomain                        `json:"storage_domain,omitempty"`
+	SSH                *SSH           `json:"ssh,omitempty"`
+	Status             string         `json:"status,omitempty"`
+	StopGlusterService string         `json:"stop_gluster_service,omitempty"`
+	StorageDomain      *StorageDomain `json:"storage_domain,omitempty"`
 	// TODO: StorageDomains                 []StorageDomain                      `json:"storage_domains,omitempty"`
 	Succeeded string `json:"succeeded,omitempty"`
 	// TODO: SynchronizedNetworkAttachments []NetworkAttachment                  `json:"synchronized_network_attachments,omitempty"`
