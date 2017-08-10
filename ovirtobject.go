@@ -84,17 +84,17 @@ type Action struct {
 	SSH                *SSH           `json:"ssh,omitempty"`
 	Status             string         `json:"status,omitempty"`
 	StopGlusterService string         `json:"stop_gluster_service,omitempty"`
-	StorageDomain      *StorageDomain `json:"storage_domain,omitempty"`
+	// TODO: StorageDomain      *StorageDomain `json:"storage_domain,omitempty"`
 	// TODO: StorageDomains                 []StorageDomain                      `json:"storage_domains,omitempty"`
 	Succeeded string `json:"succeeded,omitempty"`
 	// TODO: SynchronizedNetworkAttachments []NetworkAttachment                  `json:"synchronized_network_attachments,omitempty"`
 	Template *Template `json:"template,omitempty"`
 	// TODO: Ticket                         Ticket                               `json:"ticket,omitempty"`
-	UndeployHostedEngine string `json:"undeploy_hosted_engine,omitempty"`
+	UnDeployHostedEngine string `json:"undeploy_hosted_engine,omitempty"`
 	UseCloudInit         string `json:"use_cloud_init,omitempty"`
-	UseSysprep           string `json:"use_sysprep,omitempty"`
+	UseSysPrep           string `json:"use_sysprep,omitempty"`
 	// TODO: VirtualFunctionsConfiguration  HostNicVirtualFunctionsConfiguration `json:"virtual_functions_configuration,omitempty"`
-	VM VM `json:"_v_m,omitempty"`
+	VM *VM `json:"_v_m,omitempty"`
 	// TODO: VnicProfileMappings            []VnicProfileMapping                 `json:"vnic_profile_mappings,omitempty"`
 }
 

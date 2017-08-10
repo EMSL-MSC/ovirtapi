@@ -213,34 +213,34 @@ func (disk *Disk) Save() error {
 	return nil
 }
 
-// Copy This operation copies a disk to the specified storage domain.
-func (vm *VM) Copy(async string, disk *Disk, filter string, storageDomain *StorageDomain) error {
-	return vm.DoAction("copy", Action{
-		Async:         aync,
-		Disk:          disk,
-		Filter:        filter,
-		StorageDomain: StorageDomain,
-	})
-}
+// // Copy This operation copies a disk to the specified storage domain.
+// func (vm *VM) Copy(async string, disk *Disk, filter string, storageDomain *StorageDomain) error {
+// 	return vm.DoAction("copy", Action{
+// 		Async:         aync,
+// 		Disk:          disk,
+// 		Filter:        filter,
+// 		StorageDomain: StorageDomain,
+// 	})
+// }
 
-func (vm *VM) Export(async, filter string, storageDomain *StorageDomain) error {
-	return vm.DoAction("export", Action{
-		Async:         aync,
-		Disk:          disk,
-		Filter:        filter,
-		StorageDomain: StorageDomain,
-	})
-}
+// func (vm *VM) Export(async, filter string, storageDomain *StorageDomain) error {
+// 	return vm.DoAction("export", Action{
+// 		Async:         aync,
+// 		Disk:          disk,
+// 		Filter:        filter,
+// 		StorageDomain: StorageDomain,
+// 	})
+// }
 
-// Move a disk to another storage domain.
-func (vm *VM) Move(async, filter string, storageDomain *StorageDomain) error {
-	return vm.DoAction("move", Action{
-		Async:         aync,
-		Disk:          disk,
-		Filter:        filter,
-		StorageDomain: StorageDomain,
-	})
-}
+// // Move a disk to another storage domain.
+// func (vm *VM) Move(async, filter string, storageDomain *StorageDomain) error {
+// 	return vm.DoAction("move", Action{
+// 		Async:         aync,
+// 		Disk:          disk,
+// 		Filter:        filter,
+// 		StorageDomain: StorageDomain,
+// 	})
+// }
 
 // Sparsify the disk.
 func (vm *VM) Sparsify() error {

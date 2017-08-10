@@ -274,179 +274,129 @@ type Host struct {
 
 // Activate the host for use, such as running virtual machines.
 func (host *Host) Activate(async string) error {
-	return host.DoAction("activate", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("activate", Action {
+		Async: async,
 	})
 }
 
-// // Approve a pre-installed Hypervisor host for usage in the virtualization environment.
-// // This action also accepts an optional cluster element to define the target cluster for this host.
-// func (host *Host) Approve(async string, cluster *Cluster, host *Host) error {
-// 	return host.DoAction("Approve", struct {
-// 		Async   string `json:"async,omitempty"`
-// 		Cluster string `json:"cluster,omitempty"`
-// 		Host    string `json:"host,omitempty"`
-// 	}{
-// 		async,
-// 		cluster,
-// 		host,
-// 	})
-// }
+// Approve a pre-installed Hypervisor host for usage in the virtualization environment.
+// This action also accepts an optional cluster element to define the target cluster for this host.
+func (host *Host) Approve(async string, cluster *Cluster, newHost *Host) error {
+	return host.DoAction("Approve", Action {
+		Async: async,
+		Cluster: cluster,
+		Host: newHost,
+	})
+}
 
 // CommitNetConfig Marks the network configuration as good and persists it inside the host.
 // An API user commits the network configuration to persist a host network interface attachment or detachment, or persist the creation and deletion of a bonded interface.
 func (host *Host) CommitNetConfig(async string) error {
-	return host.DoAction("commitnetconfig", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("commitnetconfig", Action {
+		Async: async,
 	})
 }
 
 // Deactivate the host to perform maintenance tasks.
 func (host *Host) Deactivate(async, reason, stopGlusterService string) error {
-	return host.DoAction("deactivate", struct {
-		Async              string `json:"async,omitempty"`
-		Reason             string `json:"reason,omitempty"`
-		StopGlusterService string `json:"stop_gluster_service,omitempty"`
-	}{
-		async,
-		reason,
-		stopGlusterService,
+	return host.DoAction("deactivate", Action {
+		Async: async,
+		Reason: reason,
+		StopGlusterService: stopGlusterService,
 	})
 }
 
 // EnrollCertificate Enroll certificate of the host. Useful in case you get a warning that it is about to, or already expired.
 func (host *Host) EnrollCertificate(async string) error {
-	return host.DoAction("enrolcertificate", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("enrolcertificate", Action {
+		Async: async,
 	})
 }
 
 // Fence Controls host's power management device.
 func (host *Host) Fence(async, fenceType string) error {
-	return host.DoAction("fence", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("fence", Action {
+		Async: async,
 	})
 }
 
 // ForceSelectSPM Manually set a host as the storage pool manager (SPM).
 func (host *Host) ForceSelectSPM(async string) error {
-	return host.DoAction("fence", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("fence", Action {
+		Async: async,
 	})
 }
 
 // Install VDSM and related software on the host. The host type defines additional parameters for the action.
 func (host *Host) Install(async, deployHostedEngine, undeployHostedEngine, image, rootPassword string, additionalParameters *Host, ssh *SSH) error {
-	return host.DoAction("install", struct {
-		Async                string `json:"async,omitempty"`
-		DeployHostedEngine   string `json:"deploy_hosted_engine,omitempty"`
-		UndeployHostedEngine string `json:"undeploy_hosted_engine,omitempty"`
-		Image                string `json:"image,omitempty"`
-		RootPassword         string `json:"root_password,omitempty"`
-		Host                 *Host  `json:"host,omitempty"`
-		SSH                  *SSH   `json:"ssh,omitempty"`
-	}{
-		async,
-		deployHostedEngine,
-		undeployHostedEngine,
-		image,
-		rootPassword,
-		additionalParameters,
-		ssh,
+	return host.DoAction("install", Action {
+		Async: async,
+		DeployHostedEngine: deployHostedEngine,
+		Host: additionalParameters,
+		Image: image,
+		RootPassword: rootPassword,
+		SSH: ssh,
+		UnDeployHostedEngine: undeployHostedEngine,
 	})
 }
 
 // ISCSIDiscover Discover iSCSI targets on the host, using the initiator details.
 func (host *Host) ISCSIDiscover(async string, iscsi *ISCSIDetails) error {
-	return host.DoAction("iscsidiscover", struct {
-		Async string        `json:"async,omitempty"`
-		ISCSI *ISCSIDetails `json:"iscsi,omitempty"`
-	}{
-		async,
-		iscsi,
+	return host.DoAction("iscsidiscover", Action {
+		Async: async,
+		ISCSI: iscsi,
 	})
 }
 
 // ISCSILogin Login to iSCSI targets on the host, using the target details.
 func (host *Host) ISCSILogin(async string, iscsi *ISCSIDetails) error {
-	return host.DoAction("iscsilogin", struct {
-		Async string        `json:"async,omitempty"`
-		ISCSI *ISCSIDetails `json:"iscsi,omitempty"`
-	}{
-		async,
-		iscsi,
+	return host.DoAction("iscsilogin", Action {
+		Async: async,
+		ISCSI: iscsi,
 	})
 }
 
 // Refresh the host devices and capabilities.
 func (host *Host) Refresh(async string) error {
-	return host.DoAction("refresh", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("refresh", Action {
+		Async: async,
 	})
 }
 
 // // SetupNetwork This method is used to change the configuration of the network interfaces of a host.
 // func (host *Host) SetupNetwork(async, checkConnectivity string, connectivityTimeout int, modifiedBonds []HostNic, modifiedLabels []NetworkLabels, modifiedNetworkAttachments []NetworkAttachments, removedBonds []HostNIC, removedLabels []NetworkLabel, removedNetworkAttachments []NetworkAttachment, synchronizedNetworkAttachments []NetworkAttachments) error {
-// 	return host.DoAction("refresh", struct {
-// 		Async                          string               `json:"asyncomitempty"`
-// 		CheckConnectivity              string               `json:"asyncomitempty"`
-// 		ConnectivityTimeout            int                  `json:"connectivity_timeout,omitempty,string"`
-// 		ModifiedBonds                  []HostNic            `json:"modified_bondsomitempty"`
-// 		ModifiedLabels                 []NetworkLabels      `json:"modified_labelsomitempty"`
-// 		ModifiedNetworkAttachments     []NetworkAttachments `json:"modified_attachmentsomitempty"`
-// 		RemovedBonds                   []HostNIC            `json:"removed_bondsomitempty"`
-// 		RemovedLabels                  []NetworkLabel       `json:"removed_labelsomitempty"`
-// 		RemovedNetworkAttachments      []NetworkAttachment  `json:"removed_network_attachmentsomitempty"`
-// 		SynchronizedNetworkAttachments []NetworkAttachment  `json:"synchonized_network_attachmentsomitempty"`
-// 	}{
-// 		async,
-// 		checkConnectivity,
-// 		connectivityTimeout,
-// 		modifiedBonds,
-// 		modifiedLabels,
-// 		modifiedNetworkAttachments,
-// 		removedBonds,
-// 		removedLabels,
-// 		removedNetworkAttachments,
-// 		synchronizedNetworkAttachments,
+// 	return host.DoAction("refresh", Action {
+// 		Async:                           async,
+// 		CheckConnectivity:               checkConnectivity,
+// 		ConnectivityTimeout:             connectivityTimeout,
+// 		ModifiedBonds:                   modifiedBonds,
+// 		ModifiedLabels:                  modifiedLabels,
+// 		ModifiedNetworkAttachments:      modifiedNetworkAttachments,
+// 		RemovedBonds:                    removedBonds,
+// 		RemovedLabels:                   removedLabels,
+// 		RemovedNetworkAttachments:       removedNetworkAttachments,
+// 		SynchronizedNetworkAttachments:  synchronizedNetworkAttachments,
 // 	})
 // }
 
 // UnregisteredStorageDomainsDiscover ...
 func (host *Host) UnregisteredStorageDomainsDiscover(async string, iscsi *ISCSIDetails) error {
-	return host.DoAction("unregisteredstoragedomainsdiscover", struct {
-		Async string        `json:"async,omitempty"`
-		ISCSI *ISCSIDetails `json:"iscsi,omitempty"`
-	}{
-		async,
-		iscsi,
+	return host.DoAction("unregisteredstoragedomainsdiscover", Action {
+		Async: async,
+		ISCSI: iscsi,
 	})
 }
 
 // Upgrade VDSM and selected software on the host.
 func (host *Host) Upgrade(async string) error {
-	return host.DoAction("upgrade", struct {
-		Async string `json:"async,omitempty"`
-	}{
-		async,
+	return host.DoAction("upgrade", Action {
+		Async: async,
 	})
 }
 
 // UpgradeCheck Check if there are upgrades available for the host. If there are upgrades available an icon will be displayed next to host status icon in the webadmin. Audit log messages are also added to indicate the availability of upgrades. The upgrade can be started from the webadmin or by using the upgrade host action.
 func (host *Host) UpgradeCheck() error {
-	return host.DoAction("upgradecheck", struct{}{})
+	return host.DoAction("upgradecheck", Action{})
 }
 
 // GetHost retrieve a host from the server
