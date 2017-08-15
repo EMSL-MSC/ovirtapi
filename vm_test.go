@@ -1,7 +1,6 @@
 package ovirtapi_test
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"testing"
@@ -55,6 +54,43 @@ func TestVM(t *testing.T) {
 		t.Error("Error creating new vm", err)
 		return
 	}
+	newDisk := con.NewDisk()
+	newDisk.ProvisionedSize = 102400
+	newDisk.Format = "cow"
+	newDisk.Name = "attach-disk"
+	storageDomains := ovirtapi.StorageDomains{}
+	storageDomains.StorageDomain = append(storageDomains.StorageDomain, ovirtapi.Link{
+		Href: "/ovirt-engine/api/storagedomains/f7a25cf2-b2d4-43d3-8180-78f8f1c48b7d",
+		ID:   "f7a25cf2-b2d4-43d3-8180-78f8f1c48b7d",
+	})
+	newDisk.StorageDomains = &storageDomains
+	newDisk.Save()
+	if err != nil {
+		t.Fatal("Error creating a disk to attach to the vm", err)
+	}
+	for count := 0; (newDisk.Status != "ok" || newVM.Status != "down") && count < 30; count++ {
+		time.Sleep(2 * time.Second)
+		err = newDisk.Update()
+		if err != nil {
+			t.Error("Error updating Disk", err)
+			return
+		}
+		err = newVM.Update()
+		if err != nil {
+			t.Error("Error updating VM", err)
+			return
+		}
+	}
+	err = newVM.AddLink("diskattachments", ovirtapi.DiskAttachment {
+		Active: "true",
+		Bootable: "true",
+		Disk: newDisk,
+		Interface: "virtio_scsi",
+		LogicalName: "/dev/vdb",
+	})
+	if err != nil {
+		t.Fatal("Error attaching disk to the vm", err)
+	}
 	retrievedVM, err := con.GetVM(newVM.ID)
 	if err != nil {
 		t.Error("Error retrieving vm", err)
@@ -81,7 +117,6 @@ func TestVM(t *testing.T) {
 	retrievedVM.Description = "about to delete"
 	err = retrievedVM.Save()
 	if err != nil {
-		fmt.Printf("%s\n", retrievedVM.Status)
 		t.Error("Error updating vm", err)
 		return
 	}

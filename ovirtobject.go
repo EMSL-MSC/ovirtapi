@@ -3,7 +3,6 @@ package ovirtapi
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/url"
 )
 
@@ -18,9 +17,11 @@ type OvirtObject struct {
 	Con         *Connection `json:"-"`
 	Name        string      `json:"name,omitempty"`
 	Description string      `json:"description,omitempty"`
-	Actions     struct {
-		Links []Link `json:"link,omitempty"`
-	} `json:"actions,omitempty"`
+	Actions     *Actions    `json:"actions,omitempty"`
+	Links       []Link      `json:"link,omitempty"`
+}
+
+type Actions struct {
 	Links []Link `json:"link,omitempty"`
 }
 
@@ -81,9 +82,9 @@ type Action struct {
 	RestoreMemory  string `json:"restore_memory,omitempty"`
 	RootPassword   string `json:"root_password,omitempty"`
 	// TODO: Snapshot                       Snapshot                             `json:"snapshot,omitempty"`
-	SSH                *SSH           `json:"ssh,omitempty"`
-	Status             string         `json:"status,omitempty"`
-	StopGlusterService string         `json:"stop_gluster_service,omitempty"`
+	SSH                *SSH   `json:"ssh,omitempty"`
+	Status             string `json:"status,omitempty"`
+	StopGlusterService string `json:"stop_gluster_service,omitempty"`
 	// TODO: StorageDomain      *StorageDomain `json:"storage_domain,omitempty"`
 	// TODO: StorageDomains                 []StorageDomain                      `json:"storage_domains,omitempty"`
 	Succeeded string `json:"succeeded,omitempty"`
@@ -104,7 +105,7 @@ func (ovirtObject *OvirtObject) DoAction(action string, parameters interface{}) 
 			var body []byte
 			body, err = json.Marshal(parameters)
 			if err != nil {
-				return fmt.Errorf("Unable to Marshal parameters")
+				return err
 			}
 			_, err = ovirtObject.Con.Request("POST", ovirtObject.Con.ResolveLink(link.Href), body)
 			return
@@ -120,6 +121,21 @@ func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 		}
 	}
 	return nil, errors.New("Link not found")
+}
+
+func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}) error {
+	for _, link := range ovirtObject.Links {
+		if rel == link.Rel {
+			var body []byte
+			body, err := json.MarshalIndent(newObject, "", "    ")
+			if err != nil {
+				return err
+			}
+			_, err = ovirtObject.Con.Request("POST", ovirtObject.Con.ResolveLink(link.Href), body)
+			return err
+		}
+	}
+	return errors.New("Link not found")
 }
 
 func (ovirtObject *OvirtObject) Delete() error {
