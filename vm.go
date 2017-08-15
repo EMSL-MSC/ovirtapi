@@ -5,6 +5,38 @@ import (
 	"fmt"
 )
 
+// DiskAttachment The underlying storage interface of disks communication with controller.
+type DiskAttachment struct {
+	// Defines whether the disk is active in the virtual machine it's attached to.
+	Active string `json:"active,omitempty"`
+	// Defines whether the disk is bootable.
+	Bootable string `json:"bootable,omitempty"`
+	// Free text containing comments about this object.
+	Comment string `json:"comment,omitempty"`
+	// A human-readable description in plain text.
+	Description string `json:"description,omitempty"`
+	// A unique identifier.
+	ID string `json:"id,omitempty"`
+	// The type of interface driver used to connect the disk device to the virtual machine.
+	Interface string `json:"interface,omitempty"`
+	// The logical name of the virtual machine's disk, as seen from inside the virtual machine.
+	LogicalName string `json:"logical_name,omitempty"`
+	// A human-readable name in plain text.
+	Name string `json:"name,omitempty"`
+	// Defines whether the virtual machine passes discard commands to the storage.
+	PassDiscard string `json:"pass_discard,omitempty"`
+	// Indicates whether the disk is connected to the virtual machine as read only.
+	ReadOnly string `json:"read_only,omitempty"`
+	// Defines whether SCSI reservation is enabled for this disk.
+	UsesSCSIReservation string `json:"uses_scsi_reservation,omitempty"`
+	// The reference to the disk.
+	Disk *Disk `json:"disk,omitempty"`
+	// The reference to the template.
+	Template *Template `json:"template,omitempty"`
+	// The reference to the virtual machine.
+	VM *VM `json:"vm,omitempty"`
+}
+
 // Bios ...
 type Bios struct {
 	BootMenu struct {
