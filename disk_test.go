@@ -38,8 +38,7 @@ func TestDisk(t *testing.T) {
 	newDisk.Name = "test-disk"
 	storageDomains := ovirtapi.StorageDomains{}
 	storageDomains.StorageDomain = append(storageDomains.StorageDomain, ovirtapi.Link{
-		Href: "/ovirt-engine/api/storagedomains/f7a25cf2-b2d4-43d3-8180-78f8f1c48b7d",
-		ID:   "f7a25cf2-b2d4-43d3-8180-78f8f1c48b7d",
+		ID: "dfe8e7be-e495-49a7-be2d-71aba891ceb4",
 	})
 	newDisk.StorageDomains = &storageDomains
 	err = newDisk.Save()
