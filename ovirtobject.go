@@ -123,7 +123,7 @@ func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 	return nil, errors.New("Link not found")
 }
 
-func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}) error {
+func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}, addParameters map[string]string) error {
 	for _, link := range ovirtObject.Links {
 		if rel == link.Rel {
 			var body []byte
@@ -131,7 +131,29 @@ func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}) error
 			if err != nil {
 				return err
 			}
-			_, err = ovirtObject.Con.Request("POST", ovirtObject.Con.ResolveLink(link.Href), body)
+			values := url.Values{}
+			for k, v := range addParameters {
+				values.Add(k, v)
+			}
+			href := ovirtObject.Con.ResolveLink(link.Href)
+			href.RawQuery = values.Encode()
+			_, err = ovirtObject.Con.Request("POST", href, body)
+			return err
+		}
+	}
+	return errors.New("Link not found")
+}
+
+func (ovirtObject *OvirtObject) RemoveLink(rel string, id string, addParameters map[string]string) error {
+	for _, link := range ovirtObject.Links {
+		if rel == link.Rel {
+			values := url.Values{}
+			for k, v := range addParameters {
+				values.Add(k, v)
+			}
+			href := ovirtObject.Con.ResolveLink(link.Href + "/" + id)
+			href.RawQuery = values.Encode()
+			_, err := ovirtObject.Con.Request("DELETE", href, nil)
 			return err
 		}
 	}
