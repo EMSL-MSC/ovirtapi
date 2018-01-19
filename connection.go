@@ -18,6 +18,7 @@ type Connection struct {
 	UserName       string
 	Password       string
 	Debug          bool
+	Filter         bool
 	Links          []Link `json:"link"`
 	SpecialObjects struct {
 		Links []Link `json:"link"`
@@ -76,6 +77,7 @@ func NewConnection(endpoint string, username string, password string, debug bool
 		UserName: username,
 		Password: password,
 		Debug:    debug,
+		Filter:   true,
 	}
 	body, err := con.Request("GET", endpointURL, nil)
 	if err != nil {
@@ -97,6 +99,9 @@ func (con *Connection) Request(verb string, requestURL *url.URL, reqBody []byte)
 	}
 	if reqBody != nil {
 		req.Header.Add("Content-Type", "application/json")
+	}
+	if con.Filter {
+		req.Header.Add("Filter", "true")
 	}
 	req.Header.Add("Accept", "application/json")
 	req.SetBasicAuth(con.UserName, con.Password)
