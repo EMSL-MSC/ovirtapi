@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/url"
+	"reflect"
 )
 
 type Link struct {
@@ -114,6 +115,11 @@ func (ovirtObject *OvirtObject) DoAction(action string, parameters interface{}) 
 	return errors.New("Action not found")
 }
 
+type linkResponse struct {
+	DiskAttachment []DiskAttachment `json:"disk_attachment,omitempty"`
+	NIC            []NIC            `json:"nic,omitempty"`
+}
+
 func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 	for _, link := range ovirtObject.Links {
 		if rel == link.Rel {
@@ -123,7 +129,43 @@ func (ovirtObject *OvirtObject) GetLink(rel string) (*url.URL, error) {
 	return nil, errors.New("Link not found")
 }
 
-func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}, addParameters map[string]string) error {
+func (ovirtObject *OvirtObject) getLinkResponse(rel string, addParameters map[string]string) (*linkResponse, error) {
+	for _, link := range ovirtObject.Links {
+		if rel == link.Rel {
+			values := url.Values{}
+			for k, v := range addParameters {
+				values.Add(k, v)
+			}
+			href := ovirtObject.Con.ResolveLink(link.Href)
+			href.RawQuery = values.Encode()
+			body, err := ovirtObject.Con.Request("GET", href, nil)
+			if err != nil {
+				return nil, err
+			}
+			linkResp := &linkResponse{}
+			err = json.Unmarshal(body, linkResp)
+			return linkResp, err
+		}
+	}
+	return nil, errors.New("Link not found")
+}
+
+func (ovirtObject *OvirtObject) GetLinkObject(rel string, id string, addParameters map[string]string) (interface{}, error) {
+	linkResp, err := ovirtObject.getLinkResponse(rel, addParameters)
+	if err != nil {
+		return nil, err
+	}
+	val := reflect.ValueOf(*linkResp)
+	for i := 0; i < val.NumField(); i++ {
+		field := val.Field(i)
+		for j := 0; j < field.Len(); j++ {
+			return field.Index(j).Interface(), nil
+		}
+	}
+	return nil, errors.New("Connection not found")
+}
+
+func (ovirtObject *OvirtObject) AddLinkObject(rel string, newObject interface{}, addParameters map[string]string) error {
 	for _, link := range ovirtObject.Links {
 		if rel == link.Rel {
 			var body []byte
@@ -144,7 +186,7 @@ func (ovirtObject *OvirtObject) AddLink(rel string, newObject interface{}, addPa
 	return errors.New("Link not found")
 }
 
-func (ovirtObject *OvirtObject) RemoveLink(rel string, id string, addParameters map[string]string) error {
+func (ovirtObject *OvirtObject) RemoveLinkObject(rel string, id string, addParameters map[string]string) error {
 	for _, link := range ovirtObject.Links {
 		if rel == link.Rel {
 			values := url.Values{}

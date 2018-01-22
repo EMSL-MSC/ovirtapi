@@ -7,6 +7,7 @@ import (
 
 // DiskAttachment The underlying storage interface of disks communication with controller.
 type DiskAttachment struct {
+	Link
 	// Defines whether the disk is active in the virtual machine it's attached to.
 	Active string `json:"active,omitempty"`
 	// Defines whether the disk is bootable.
@@ -15,8 +16,6 @@ type DiskAttachment struct {
 	Comment string `json:"comment,omitempty"`
 	// A human-readable description in plain text.
 	Description string `json:"description,omitempty"`
-	// A unique identifier.
-	ID string `json:"id,omitempty"`
 	// The type of interface driver used to connect the disk device to the virtual machine.
 	Interface string `json:"interface,omitempty"`
 	// The logical name of the virtual machine's disk, as seen from inside the virtual machine.
@@ -440,22 +439,22 @@ func (vm *VM) CancelMigration() error {
 
 // Clone Clones to a new VM
 func (vm *VM) Clone(async string, newVM *VM) error {
-	return vm.DoAction("clone", Action {
+	return vm.DoAction("clone", Action{
 		Async: async,
-		VM: newVM,
+		VM:    newVM,
 	})
 }
 
 // CommitSnapshot Permanently restores the virtual machine to the state of the previewed snapshot.
 func (vm *VM) CommitSnapshot(async string) error {
-	return vm.DoAction("commitsnapshot", Action {
+	return vm.DoAction("commitsnapshot", Action{
 		Async: async,
 	})
 }
 
 // Detach Detaches a virtual machine from a pool.
 func (vm *VM) Detach() error {
-	return vm.DoAction("detach", Action {})
+	return vm.DoAction("detach", Action{})
 }
 
 // // Export Exports a virtual machine to an export domain.
@@ -470,93 +469,93 @@ func (vm *VM) Detach() error {
 
 // FreezeFilesystems Freezes virtual machine file systems.
 func (vm *VM) FreezeFilesystems(async string) error {
-	return vm.DoAction("freezefilesystems", Action {
+	return vm.DoAction("freezefilesystems", Action{
 		Async: async,
 	})
 }
 
 // Logon Initiates the automatic user logon to access a virtual machine from an external console.
 func (vm *VM) Logon(async string) error {
-	return vm.DoAction("logon", Action {
+	return vm.DoAction("logon", Action{
 		Async: async,
 	})
 }
 
 // Maintenance Sets the global maintenance mode on the hosted engine virtual machine.
 func (vm *VM) Maintenance(async, maintenanceEnabled string) error {
-	return vm.DoAction("maintenance", Action {
-		Async: async,
+	return vm.DoAction("maintenance", Action{
+		Async:              async,
 		MaintenanceEnabled: maintenanceEnabled,
 	})
 }
 
 // Migrate Migrates a virtual machine to another physical host.
 func (vm *VM) Migrate(async string, cluster *Cluster, force string, host *Host) error {
-	return vm.DoAction("migrate", Action {
-		Async: async,
+	return vm.DoAction("migrate", Action{
+		Async:   async,
 		Cluster: cluster,
-		Force: force,
-		Host: host,
+		Force:   force,
+		Host:    host,
 	})
 }
 
 // Reboot Sends a reboot request to a virtual machine.
 func (vm *VM) Reboot(async string) error {
-	return vm.DoAction("reboot", Action {
+	return vm.DoAction("reboot", Action{
 		Async: async,
 	})
 }
 
 // ReorderMACAddresses
 func (vm *VM) ReorderMACAddresses(async string) error {
-	return vm.DoAction("reordermacaddresses", Action {
+	return vm.DoAction("reordermacaddresses", Action{
 		Async: async,
 	})
 }
 
 // Shutdown This operation sends a shutdown request to a virtual machine.
 func (vm *VM) Shutdown(async string) error {
-	return vm.DoAction("shutdown", Action {
+	return vm.DoAction("shutdown", Action{
 		Async: async,
 	})
 }
 
 // Start Starts the virtual machine.
 func (vm *VM) Start(async, filter, pause, useCloudInit, useSysprep string, nextBootVM *VM) error {
-	return vm.DoAction("start", Action {
-		Async: async,
-		Filter: filter,
-		Pause: pause,
+	return vm.DoAction("start", Action{
+		Async:        async,
+		Filter:       filter,
+		Pause:        pause,
 		UseCloudInit: useCloudInit,
-		UseSysPrep: useSysprep,
-		VM: nextBootVM,
+		UseSysPrep:   useSysprep,
+		VM:           nextBootVM,
 	})
 }
 
 // Stop This operation forces a virtual machine to power-off.
 func (vm *VM) Stop(async string) error {
-	return vm.DoAction("stop", Action {
+	return vm.DoAction("stop", Action{
 		Async: async,
 	})
 }
 
 //Suspend This operation saves the virtual machine state to disk and stops it.
 func (vm *VM) Suspend(async string) error {
-	return vm.DoAction("suspend", Action {
+	return vm.DoAction("suspend", Action{
 		Async: async,
 	})
 }
 
 // ThawFilesystems Thaws virtual machine file systems.
 func (vm *VM) ThawFilesystems(async string) error {
-	return vm.DoAction("thawfilesystems", Action {
+	return vm.DoAction("thawfilesystems", Action{
 		Async: async,
 	})
 }
 
 // UndoSnapshot Restores the virtual machine to the state it had before previewing the snapshot.
 func (vm *VM) UndoSnapshot(async string) error {
-	return vm.DoAction("undosnapshot", Action {
+	return vm.DoAction("undosnapshot", Action{
 		Async: async,
 	})
 }
