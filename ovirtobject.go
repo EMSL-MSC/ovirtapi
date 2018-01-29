@@ -165,13 +165,13 @@ func (ovirtObject *OvirtObject) GetLinkObject(rel string, id string, addParamete
 	return nil, errors.New("Connection not found")
 }
 
-func (ovirtObject *OvirtObject) AddLinkObject(rel string, newObject interface{}, addParameters map[string]string) error {
+func (ovirtObject *OvirtObject) AddLinkObject(rel string, newObject interface{}, addParameters map[string]string) (string, error) {
 	for _, link := range ovirtObject.Links {
 		if rel == link.Rel {
 			var body []byte
 			body, err := json.MarshalIndent(newObject, "", "    ")
 			if err != nil {
-				return err
+				return "", err
 			}
 			values := url.Values{}
 			for k, v := range addParameters {
@@ -179,11 +179,16 @@ func (ovirtObject *OvirtObject) AddLinkObject(rel string, newObject interface{},
 			}
 			href := ovirtObject.Con.ResolveLink(link.Href)
 			href.RawQuery = values.Encode()
-			_, err = ovirtObject.Con.Request("POST", href, body)
-			return err
+			resp, err := ovirtObject.Con.Request("POST", href, body)
+			respLink := Link{}
+			err = json.Unmarshal(resp, respLink)
+			if err != nil {
+				return "", err
+			}
+			return respLink.ID, err
 		}
 	}
-	return errors.New("Link not found")
+	return "", errors.New("Link not found")
 }
 
 func (ovirtObject *OvirtObject) RemoveLinkObject(rel string, id string, addParameters map[string]string) error {

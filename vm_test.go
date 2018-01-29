@@ -80,7 +80,7 @@ func TestVM(t *testing.T) {
 			return
 		}
 	}
-	err = newVM.AddLinkObject("diskattachments", ovirtapi.DiskAttachment{
+	_, err = newVM.AddLinkObject("diskattachments", ovirtapi.DiskAttachment{
 		Active:      "true",
 		Bootable:    "true",
 		Disk:        newDisk,
@@ -127,7 +127,7 @@ func TestVM(t *testing.T) {
 			return
 		}
 	}
-	attachment, err := retrievedVM.GetLinkObject("diskattachments", newDisk.ID, nil)
+	_, err = retrievedVM.GetLinkObject("diskattachments", newDisk.ID, nil)
 	if err != nil {
 		t.Error("Error retrieving disk attachment", err)
 	}
