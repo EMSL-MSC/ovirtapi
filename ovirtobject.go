@@ -187,7 +187,7 @@ func (ovirtObject *OvirtObject) AddLinkObject(rel string, newObject interface{},
 			href.RawQuery = values.Encode()
 			resp, err := ovirtObject.Con.Request("POST", href, body)
 			respLink := Link{}
-			err = json.Unmarshal(resp, respLink)
+			err = json.Unmarshal(resp, &respLink)
 			if err != nil {
 				return "", err
 			}
