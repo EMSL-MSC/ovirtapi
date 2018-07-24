@@ -314,8 +314,8 @@ type MemoryOverCommit struct {
 // MemoryPolicy Logical grouping of memory related properties of virtual machine-like entities.
 type MemoryPolicy struct {
 	Ballooning           string                `json:"ballooning,omitempty"`
-	Guaranteed           int                   `json:"guaranteed,omitempty"`
-	Max                  int                   `json:"max,omitempty"`
+	Guaranteed           int                   `json:"guaranteed,string,omitempty"`
+	Max                  int                   `json:"max,string,omitempty"`
 	OverCommit           *MemoryOverCommit     `json:"over_commit,omitempty"`
 	TransparentHugePages *TransparentHugePages `json:"transparent_huge_pages,omitempty"`
 }
@@ -410,7 +410,7 @@ type VM struct {
 	Initialization             *Initialization       `json:"initialization,omitempty"`
 	Io                         *IO                   `json:"io,omitempty"`
 	LargeIcon                  *Link                 `json:"large_icon,omitempty"`
-	Memory                     int                   `json:"memory,omitempty"`
+	Memory                     int                   `json:"memory,string,omitempty"`
 	MemoryPolicy               *MemoryPolicy         `json:"memory_policy,omitempty"`
 	Migration                  *MigrationOptions     `json:"migration,omitempty"`
 	MigrationDowntime          int                   `json:"migration_downtime,omitempty,string"`
