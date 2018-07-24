@@ -21,7 +21,7 @@ type Template struct {
 	Display                    *Display           `json:"display,omitempty"`
 	HighAvailability           *HighAvailability  `json:"high_availability,omitempty"`
 	LargeIcon                  *Link              `json:"large_icon,omitempty"`
-	Memory                     int                `json:"memory,omitempty"`
+	Memory                     int                `json:"memory,string,omitempty"`
 	MemoryPolicy               *MemoryPolicy      `json:"memory_policy,omitempty"`
 	Migration                  *MigrationOptions  `json:"migration,omitempty"`
 	MigrationDowntime          string             `json:"migration_downtime,omitempty"`
